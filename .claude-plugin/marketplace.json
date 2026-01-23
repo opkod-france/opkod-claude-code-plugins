@@ -21,8 +21,8 @@
       "author": {
         "name": "Ayoub Hidri"
       },
-      "homepage": "https://github.com/opkod-france/claude-skill-refactoring-ui",
-      "repository": "https://github.com/opkod-france/claude-skill-refactoring-ui",
+      "homepage": "https://opkod-france.github.io/opkod-claude-code-plugins",
+      "repository": "https://github.com/opkod-france/opkod-claude-code-plugins",
       "license": "MIT"
     }
   ]
