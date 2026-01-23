@@ -3,100 +3,645 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPKOD Claude Plugins Marketplace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>OPKOD Marketplace | Claude Code Plugins</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        code, pre { font-family: 'JetBrains Mono', monospace; }
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1a1;
+            --text-muted: #525252;
+            --accent: #c4f464;
+            --accent-dim: #a3cc52;
+            --border: #262626;
+            --border-hover: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Scanline effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            padding: 6rem 0 4rem;
+            position: relative;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeSlideIn 0.6s ease-out;
+        }
+
+        .brand-mark::before {
+            content: '>';
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .title-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            animation: fadeSlideIn 0.6s ease-out 0.1s backwards;
+        }
+
+        h1 .italic {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            max-width: 400px;
+            animation: fadeSlideIn 0.6s ease-out 0.2s backwards;
+        }
+
+        .subtitle strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ASCII decoration */
+        .ascii-decoration {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.65rem;
+            line-height: 1.4;
+            color: var(--text-muted);
+            opacity: 0.4;
+            display: none;
+            animation: fadeIn 1s ease-out 0.5s backwards;
+        }
+
+        @media (min-width: 768px) {
+            .ascii-decoration {
+                display: block;
+            }
+        }
+
+        /* Quick install section */
+        .install-section {
+            margin-bottom: 5rem;
+            animation: fadeSlideIn 0.6s ease-out 0.3s backwards;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .terminal-window {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-hover);
+        }
+
+        .terminal-dot:first-child { background: #ff5f57; }
+        .terminal-dot:nth-child(2) { background: #febc2e; }
+        .terminal-dot:nth-child(3) { background: #28c840; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-size: 0.85rem;
+        }
+
+        .terminal-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .terminal-prompt {
+            color: var(--accent);
+            user-select: none;
+        }
+
+        .terminal-cmd {
+            color: var(--text-primary);
+        }
+
+        .terminal-arg {
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.3rem 0.6rem;
+            font-size: 0.65rem;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .copy-btn.copied {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Plugins section */
+        .plugins-section {
+            margin-bottom: 6rem;
+        }
+
+        .plugins-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2rem;
+            animation: fadeSlideIn 0.6s ease-out 0.4s backwards;
+        }
+
+        h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2rem;
+            font-weight: 400;
+        }
+
+        .plugin-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Plugin card */
+        .plugin-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: fadeSlideIn 0.6s ease-out 0.5s backwards;
+        }
+
+        .plugin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.3s ease;
+        }
+
+        .plugin-card:hover {
+            border-color: var(--border-hover);
+            transform: translateX(4px);
+        }
+
+        .plugin-card:hover::before {
+            height: 100%;
+        }
+
+        .plugin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .plugin-name {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+
+        .plugin-version {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            padding: 0.2rem 0.5rem;
+            background: rgba(196, 244, 100, 0.1);
+            border: 1px solid rgba(196, 244, 100, 0.2);
+        }
+
+        .plugin-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+        }
+
+        .plugin-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.6rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--border-hover);
+            color: var(--text-secondary);
+        }
+
+        .plugin-install {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plugin-install::before {
+            content: 'INSTALL';
+            position: absolute;
+            top: -0.5rem;
+            right: 1rem;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            background: var(--bg-primary);
+            padding: 0 0.5rem;
+        }
+
+        .plugin-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .plugin-meta a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s ease;
+        }
+
+        .plugin-meta a:hover {
+            color: var(--accent);
+        }
+
+        .plugin-meta svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            animation: fadeSlideIn 0.6s ease-out 0.6s backwards;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-brand {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.4; }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.1em;
+            background: var(--accent);
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            header {
+                padding: 4rem 0 3rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .plugin-card {
+                padding: 1.5rem;
+            }
+
+            .plugin-name {
+                font-size: 1.25rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen">
-    <div class="max-w-4xl mx-auto px-6 py-16">
+<body>
+    <div class="container">
         <!-- Header -->
-        <header class="text-center mb-16">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-sm mb-6">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-                Claude Code Plugins
+        <header>
+            <div class="brand-mark">Claude Code Plugins</div>
+
+            <div class="title-wrapper">
+                <h1>OPKOD<br><span class="italic">Marketplace</span></h1>
+
+                <div class="ascii-decoration">
+┌──────────────────┐
+│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  │
+│  ▓ OPKOD  ░░░ ▓  │
+│  ▓ FRANCE ░░░ ▓  │
+│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  │
+└──────────────────┘
+                </div>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
-                OPKOD Marketplace
-            </h1>
-            <p class="text-zinc-400 text-lg max-w-2xl mx-auto">
-                Professional plugins for Claude Code by OPKOD France.
+
+            <p class="subtitle">
+                Curated plugins for <strong>Claude Code</strong> by OPKOD France.
                 Enhance your AI-assisted development workflow.
             </p>
         </header>
 
         <!-- Quick Install -->
-        <section class="mb-16">
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <h2 class="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4">Quick Install</h2>
-                <div class="bg-zinc-950 rounded-lg p-4 font-mono text-sm">
-                    <span class="text-zinc-500">$</span>
-                    <span class="text-emerald-400">claude plugins add</span>
-                    <span class="text-orange-300">https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish</span>
+        <section class="install-section">
+            <div class="section-label">Quick Install</div>
+
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="terminal-dot"></span>
+                    <span class="terminal-dot"></span>
+                    <span class="terminal-dot"></span>
+                    <span class="terminal-title">terminal</span>
+                </div>
+                <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
+                <div class="terminal-body">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span>
+                        <span class="terminal-cmd">claude plugins add</span>
+                        <span class="terminal-arg">https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish</span>
+                        <span class="cursor"></span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Plugins -->
-        <section class="mb-16">
-            <h2 class="text-2xl font-semibold mb-6">Available Plugins</h2>
-            <div class="space-y-4" id="plugins-list">
-                <!-- Plugin Card -->
-                <article class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-semibold text-white mb-1">ui-polish</h3>
-                            <p class="text-zinc-400">Professional UI design principles using Tailwind CSS and shadcn/ui</p>
-                        </div>
-                        <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-xs rounded-md">v0.1.0</span>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-xs rounded">ui</span>
-                        <span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-xs rounded">design</span>
-                        <span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-xs rounded">tailwind</span>
-                        <span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-xs rounded">shadcn</span>
-                        <span class="px-2 py-1 bg-zinc-800 text-zinc-400 text-xs rounded">react</span>
-                    </div>
-
-                    <div class="bg-zinc-950 rounded-lg p-3 font-mono text-sm mb-4">
-                        <span class="text-zinc-500">$</span>
-                        <span class="text-emerald-400">claude plugins add</span>
-                        <span class="text-orange-300">https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish</span>
-                    </div>
-
-                    <div class="flex items-center gap-4 text-sm">
-                        <a href="https://github.com/opkod-france/claude-skill-refactoring-ui"
-                           class="text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                            Repository
-                        </a>
-                        <span class="text-zinc-600">|</span>
-                        <span class="text-zinc-500">by Ayoub Hidri</span>
-                        <span class="text-zinc-600">|</span>
-                        <span class="text-zinc-500">MIT License</span>
-                    </div>
-                </article>
-
-                <!-- More plugins will be added here -->
+        <section class="plugins-section">
+            <div class="plugins-header">
+                <h2>Available Plugins</h2>
+                <span class="plugin-count">01 plugin</span>
             </div>
+
+            <article class="plugin-card">
+                <div class="plugin-header">
+                    <h3 class="plugin-name">
+                        ui-polish
+                        <span class="plugin-version">v0.1.0</span>
+                    </h3>
+                </div>
+
+                <p class="plugin-description">
+                    Professional UI design principles using Tailwind CSS and shadcn/ui.
+                    Apply Refactoring UI methodology to create polished, professional interfaces.
+                </p>
+
+                <div class="plugin-tags">
+                    <span class="tag">ui</span>
+                    <span class="tag">design</span>
+                    <span class="tag">tailwind</span>
+                    <span class="tag">shadcn</span>
+                    <span class="tag">react</span>
+                </div>
+
+                <div class="plugin-install">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span>
+                        <span class="terminal-cmd">claude plugins add</span>
+                        <span class="terminal-arg">https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish</span>
+                    </div>
+                </div>
+
+                <div class="plugin-meta">
+                    <a href="https://github.com/opkod-france/claude-skill-refactoring-ui" target="_blank" rel="noopener">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        Repository
+                    </a>
+                    <span>by Ayoub Hidri</span>
+                    <span>MIT License</span>
+                </div>
+            </article>
         </section>
 
         <!-- Footer -->
-        <footer class="text-center text-zinc-500 text-sm border-t border-zinc-800 pt-8">
-            <p>
-                Built by <a href="https://github.com/opkod-france" class="text-zinc-400 hover:text-white">OPKOD France</a>
-                &bull;
-                <a href="https://github.com/opkod-france/claude-plugins-marketplace" class="text-zinc-400 hover:text-white">GitHub</a>
-            </p>
+        <footer>
+            <div class="footer-content">
+                <div class="footer-brand">OPKOD France</div>
+                <nav class="footer-links">
+                    <a href="https://github.com/opkod-france" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://github.com/opkod-france/claude-plugins-marketplace" target="_blank" rel="noopener">Source</a>
+                </nav>
+            </div>
         </footer>
     </div>
+
+    <script>
+        function copyInstall(btn) {
+            const cmd = 'claude plugins add https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish';
+            navigator.clipboard.writeText(cmd).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
