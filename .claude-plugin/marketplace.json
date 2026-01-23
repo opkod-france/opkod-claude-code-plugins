@@ -7,8 +7,8 @@
     "url": "https://github.com/opkod-france"
   },
   "metadata": {
-    "homepage": "https://opkod-france.github.io/claude-plugins-marketplace",
-    "repository": "https://github.com/opkod-france/claude-plugins-marketplace"
+    "homepage": "https://opkod-france.github.io/opkod-plugins",
+    "repository": "https://github.com/opkod-france/opkod-plugins"
   },
   "plugins": [
     {
