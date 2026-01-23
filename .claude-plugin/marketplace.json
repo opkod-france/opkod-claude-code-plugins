@@ -13,7 +13,7 @@
   "plugins": [
     {
       "name": "ui-polish",
-      "source": "https://raw.githubusercontent.com/opkod-france/claude-skill-refactoring-ui/main/.claude-plugin",
+      "source": "../plugins/ui-polish",
       "description": "Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology to create polished, professional interfaces.",
       "version": "0.1.0",
       "category": "frontend",
