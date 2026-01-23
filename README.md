@@ -1,4 +1,4 @@
-# OPKOD Plugins
+# OPKOD Claude Code Plugins
 
 Claude Code plugin marketplace by OPKOD France.
 
