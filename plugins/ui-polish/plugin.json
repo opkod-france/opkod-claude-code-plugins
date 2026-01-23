@@ -7,11 +7,5 @@
     "email": "ayhid@users.noreply.github.com"
   },
   "repository": "https://github.com/opkod-france/opkod-claude-code-plugins",
-  "license": "MIT",
-  "skills": {
-    "autoDiscover": true
-  },
-  "commands": {
-    "autoDiscover": true
-  }
+  "license": "MIT"
 }
