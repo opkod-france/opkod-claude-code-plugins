@@ -9,9 +9,9 @@
   "repository": "https://github.com/opkod-france/claude-skill-refactoring-ui",
   "license": "MIT",
   "skills": {
-    "auto_discover": true
+    "autoDiscover": true
   },
   "commands": {
-    "auto_discover": true
+    "autoDiscover": true
   }
 }
