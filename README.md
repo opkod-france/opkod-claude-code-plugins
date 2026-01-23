@@ -4,11 +4,24 @@ A self-hosted marketplace for Claude Code plugins by OPKOD France.
 
 ## Installation
 
-Install plugins directly from this marketplace using the Claude Code CLI:
+Install plugins from this marketplace using the Claude Code CLI:
 
 ```bash
-# Install a specific plugin
-claude plugins add https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish
+claude plugins add https://opkod-france.github.io/claude-plugins-marketplace/plugins/<plugin-name>
+```
+
+### Managing Plugins
+
+```bash
+# List installed plugins
+claude plugins list
+
+# Remove a plugin
+claude plugins remove <plugin-name>
+
+# Update a plugin (remove and re-add)
+claude plugins remove <plugin-name>
+claude plugins add https://opkod-france.github.io/claude-plugins-marketplace/plugins/<plugin-name>
 ```
 
 ## Available Plugins
