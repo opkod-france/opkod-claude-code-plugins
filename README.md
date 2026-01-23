@@ -6,7 +6,7 @@ Claude Code plugin marketplace by OPKOD France.
 
 ```bash
 # 1. Add the marketplace
-/plugin marketplace add opkod-france/opkod-plugins
+/plugin marketplace add opkod-france/opkod-claude-code-plugins
 
 # 2. Install a plugin
 /plugin install ui-polish@opkod-france
