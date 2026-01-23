@@ -152,16 +152,21 @@ See **[forms.md](references/forms.md)** for multi-step forms, validation, and mo
 - ❌ Not using `space-y-*` or `gap-*` for consistent spacing
 - ❌ Arbitrary Tailwind values like `w-[423px]` (use scale)
 - ❌ Grey text on colored backgrounds (use same-hue shades)
+- ❌ **Long forms in sheets/drawers** — Forms with >5 fields or that scroll belong on a full page
+- ❌ **Scrolling modals/sheets** — If content scrolls, the container is wrong
 
 ## Quick Decision: Modal vs Sheet vs Page
 
 ```
 Is this a confirmation/alert? → Modal
-Need to reference background content? → Sheet/Drawer
-Complex form (>5 fields)? → Full Page or Drawer
+Need to reference background content? → Sheet/Drawer (but NOT for long forms)
+Complex form (>5 fields)? → Full Page (NEVER sheet/drawer)
+Form scrolls or has sections? → Full Page
 Quick edit (1-3 fields)? → Inline or small Modal
 Settings/filters panel? → Drawer
 ```
+
+**⚠️ Common mistake:** Putting long forms in sheets/drawers. If the form scrolls, has >5 fields, or has multiple sections, use a full page instead.
 
 ## Quick Decision: Confirmation Pattern
 

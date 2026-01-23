@@ -127,6 +127,24 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 **Side sheets:** Use for desktop filters, settings panels, detail views
 **Bottom sheets:** Use for mobile actions, limited options (iOS/Android pattern)
 
+**Sheet/Drawer Anti-patterns:**
+- ❌ **Forms with >5 fields** — Use full page instead
+- ❌ **Scrolling forms** — If form scrolls within sheet, it's too long
+- ❌ **Multi-step wizards** — Progress gets lost in constrained space
+- ❌ **Complex validation** — Error states need room to display
+- ❌ **Forms requiring focus** — Sheets preserve context; complex forms need isolation
+
+**When to migrate Sheet → Full Page:**
+```
+Sheet form has become too long when:
+├─ User must scroll to see all fields
+├─ Form has more than 5-6 fields
+├─ Form has multiple sections/groups
+├─ Form requires file uploads or rich editors
+├─ Validation errors stack up and overflow
+└─ Mobile users can't complete it easily
+```
+
 ### When to Use Full Page
 
 **Best for:**
