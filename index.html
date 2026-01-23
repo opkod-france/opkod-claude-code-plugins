@@ -24,182 +24,99 @@
         }
     </script>
     <style>
-        /* Minimal custom CSS for effects Tailwind can't do */
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
         .cursor-blink { animation: blink 1s step-end infinite; }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fadeSlideIn 0.6s ease-out backwards; }
-        .animate-delay-100 { animation-delay: 0.1s; }
-        .animate-delay-200 { animation-delay: 0.2s; }
-        .animate-delay-300 { animation-delay: 0.3s; }
-        .animate-delay-400 { animation-delay: 0.4s; }
-        .animate-delay-500 { animation-delay: 0.5s; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-mono">
-    <div class="max-w-4xl mx-auto px-6 md:px-8">
+    <div class="max-w-3xl mx-auto px-6 md:px-8">
 
         <!-- Header -->
-        <header class="pt-24 pb-16 relative">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 text-xs uppercase tracking-widest text-zinc-400 mb-8 animate-fade-in">
+        <header class="pt-20 pb-12">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 text-xs uppercase tracking-widest text-zinc-400 mb-6">
                 <span class="text-accent font-semibold">&gt;</span>
                 Claude Code Plugins
             </div>
 
-            <div class="relative mb-6">
-                <h1 class="font-serif text-5xl md:text-7xl font-normal leading-[0.95] tracking-tight animate-fade-in animate-delay-100">
-                    OPKOD<br><span class="italic text-accent">Marketplace</span>
-                </h1>
+            <h1 class="font-serif text-5xl md:text-6xl font-normal leading-[0.95] tracking-tight mb-4">
+                OPKOD<br><span class="italic text-accent">Marketplace</span>
+            </h1>
 
-                <!-- ASCII decoration - hidden on mobile -->
-                <pre class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 text-[0.6rem] leading-tight text-zinc-600 opacity-40">┌──────────────────┐
-│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  │
-│  ▓ OPKOD  ░░░ ▓  │
-│  ▓ FRANCE ░░░ ▓  │
-│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  │
-└──────────────────┘</pre>
-            </div>
-
-            <p class="text-sm text-zinc-400 max-w-md animate-fade-in animate-delay-200">
+            <p class="text-sm text-zinc-400 max-w-md">
                 Curated plugins for <strong class="text-zinc-100 font-medium">Claude Code</strong> by OPKOD France.
-                Enhance your AI-assisted development workflow.
             </p>
         </header>
 
-        <!-- Add Marketplace -->
-        <section class="mb-16 animate-fade-in animate-delay-300">
+        <!-- Setup -->
+        <section class="mb-12">
             <div class="flex items-center gap-4 mb-4">
-                <span class="text-[0.65rem] uppercase tracking-widest text-zinc-500">Add This Marketplace</span>
+                <span class="text-[0.65rem] uppercase tracking-widest text-zinc-500">Setup</span>
                 <div class="flex-1 h-px bg-zinc-800"></div>
             </div>
 
-            <div class="bg-zinc-900 border border-zinc-800 overflow-hidden relative">
-                <div class="flex items-center gap-2 px-4 py-3 bg-zinc-900/50 border-b border-zinc-800">
-                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span class="flex-1 text-center text-[0.65rem] text-zinc-500">claude code</span>
+            <div class="space-y-3">
+                <!-- Step 1 -->
+                <div class="bg-zinc-900 border border-zinc-800 p-4 relative">
+                    <button onclick="copy(this, '/plugin marketplace add opkod-france/claude-plugins-marketplace')" class="absolute top-4 right-4 px-2 py-1 text-[0.6rem] uppercase tracking-wider text-zinc-500 border border-zinc-700 hover:border-accent hover:text-accent transition-colors">
+                        Copy
+                    </button>
+                    <div class="text-[0.65rem] text-accent mb-2">1. Add marketplace</div>
+                    <code class="text-sm">
+                        <span class="text-accent select-none">&gt;</span>
+                        <span class="text-zinc-100">/plugin marketplace add</span>
+                        <span class="text-zinc-400">opkod-france/claude-plugins-marketplace</span>
+                    </code>
                 </div>
-                <button onclick="copyInstall(this)" class="absolute top-3 right-4 px-2 py-1 text-[0.6rem] uppercase tracking-wider text-zinc-500 border border-zinc-700 hover:border-accent hover:text-accent transition-colors">
-                    Copy
-                </button>
-                <div class="p-5 text-sm">
-                    <span class="text-accent select-none">&gt;</span>
-                    <span class="text-zinc-100 ml-2">/plugin marketplace add</span>
-                    <span class="text-zinc-400 ml-2 break-all">opkod-france/claude-plugins-marketplace</span>
-                    <span class="inline-block w-2 h-4 bg-accent ml-0.5 align-text-bottom cursor-blink"></span>
+
+                <!-- Step 2 -->
+                <div class="bg-zinc-900 border border-zinc-800 p-4 relative">
+                    <button onclick="copy(this, '/plugin install ui-polish@opkod-france')" class="absolute top-4 right-4 px-2 py-1 text-[0.6rem] uppercase tracking-wider text-zinc-500 border border-zinc-700 hover:border-accent hover:text-accent transition-colors">
+                        Copy
+                    </button>
+                    <div class="text-[0.65rem] text-accent mb-2">2. Install a plugin</div>
+                    <code class="text-sm">
+                        <span class="text-accent select-none">&gt;</span>
+                        <span class="text-zinc-100">/plugin install</span>
+                        <span class="text-zinc-400">ui-polish@opkod-france</span>
+                    </code>
                 </div>
             </div>
-            <p class="mt-4 text-xs text-zinc-500">
-                Run this command inside Claude Code to add the marketplace, then browse plugins with <code class="px-1.5 py-0.5 bg-zinc-900 border border-zinc-800 text-zinc-400">/plugin</code>
+
+            <p class="mt-4 text-xs text-zinc-600">
+                Or browse available plugins with <code class="text-zinc-500">/plugin</code> → Discover tab
             </p>
         </section>
 
-        <!-- Getting Started -->
-        <section class="mb-16 animate-fade-in animate-delay-300">
-            <div class="flex items-center gap-4 mb-4">
-                <span class="text-[0.65rem] uppercase tracking-widest text-zinc-500">Getting Started</span>
-                <div class="flex-1 h-px bg-zinc-800"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800 border border-zinc-800">
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-accent tracking-wider mb-3">01</div>
-                    <h3 class="font-serif text-lg mb-2">Add Marketplace</h3>
-                    <p class="text-xs text-zinc-500 mb-4">Register this catalog with Claude Code</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin marketplace add <span class="text-accent">opkod-france/claude-plugins-marketplace</span></code>
-                </div>
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-accent tracking-wider mb-3">02</div>
-                    <h3 class="font-serif text-lg mb-2">Browse & Install</h3>
-                    <p class="text-xs text-zinc-500 mb-4">Open plugin manager, go to Discover tab</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin</code>
-                </div>
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-accent tracking-wider mb-3">03</div>
-                    <h3 class="font-serif text-lg mb-2">Or Install Directly</h3>
-                    <p class="text-xs text-zinc-500 mb-4">Install a specific plugin by name</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin install <span class="text-accent">ui-polish@opkod-france</span></code>
-                </div>
-            </div>
-        </section>
-
-        <!-- Managing Plugins -->
-        <section class="mb-16 animate-fade-in animate-delay-400">
-            <div class="flex items-center gap-4 mb-4">
-                <span class="text-[0.65rem] uppercase tracking-widest text-zinc-500">Managing Plugins</span>
-                <div class="flex-1 h-px bg-zinc-800"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800 border border-zinc-800">
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-zinc-600 tracking-wider mb-3">—</div>
-                    <h3 class="font-serif text-lg mb-2">List Installed</h3>
-                    <p class="text-xs text-zinc-500 mb-4">View all your installed plugins</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin</code>
-                    <span class="block text-[0.65rem] text-zinc-600 italic mt-2">→ Installed tab</span>
-                </div>
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-zinc-600 tracking-wider mb-3">—</div>
-                    <h3 class="font-serif text-lg mb-2">Disable / Enable</h3>
-                    <p class="text-xs text-zinc-500 mb-4">Toggle a plugin without removing</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin disable <span class="text-accent">ui-polish@opkod-france</span></code>
-                </div>
-                <div class="bg-zinc-900 p-5">
-                    <div class="text-[0.65rem] text-zinc-600 tracking-wider mb-3">—</div>
-                    <h3 class="font-serif text-lg mb-2">Uninstall</h3>
-                    <p class="text-xs text-zinc-500 mb-4">Completely remove a plugin</p>
-                    <code class="block text-xs text-zinc-400 bg-zinc-950 border border-zinc-800 p-3">/plugin uninstall <span class="text-accent">ui-polish@opkod-france</span></code>
-                </div>
-            </div>
-        </section>
-
         <!-- Available Plugins -->
-        <section class="mb-20 animate-fade-in animate-delay-500">
-            <div class="flex justify-between items-baseline mb-8">
-                <h2 class="font-serif text-3xl">Available Plugins</h2>
-                <span class="text-xs text-zinc-500">01 plugin</span>
+        <section class="mb-16">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-[0.65rem] uppercase tracking-widest text-zinc-500">Available Plugins</span>
+                <div class="flex-1 h-px bg-zinc-800"></div>
             </div>
 
-            <article class="bg-zinc-900 border border-zinc-800 p-6 md:p-8 relative group transition-all duration-300 hover:border-zinc-700 hover:translate-x-1">
-                <!-- Accent bar on hover -->
+            <article class="bg-zinc-900 border border-zinc-800 p-6 relative group transition-all duration-300 hover:border-zinc-700">
                 <div class="absolute left-0 top-0 w-1 h-0 bg-accent transition-all duration-300 group-hover:h-full"></div>
 
-                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                    <h3 class="font-serif text-2xl flex items-baseline gap-3 flex-wrap">
-                        ui-polish
-                        <span class="font-mono text-[0.65rem] text-accent px-2 py-0.5 bg-accent/10 border border-accent/20">v0.1.0</span>
-                    </h3>
+                <div class="flex items-baseline gap-3 mb-3 flex-wrap">
+                    <h3 class="font-serif text-2xl">ui-polish</h3>
+                    <span class="font-mono text-[0.65rem] text-accent px-2 py-0.5 bg-accent/10 border border-accent/20">v0.1.0</span>
                 </div>
 
-                <p class="text-sm text-zinc-400 mb-6 max-w-lg">
-                    Professional UI design principles using Tailwind CSS and shadcn/ui.
-                    Apply Refactoring UI methodology to create polished, professional interfaces.
+                <p class="text-sm text-zinc-400 mb-4">
+                    Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology.
                 </p>
 
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500 hover:text-zinc-400 hover:border-zinc-600 transition-colors">ui</span>
-                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500 hover:text-zinc-400 hover:border-zinc-600 transition-colors">design</span>
-                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500 hover:text-zinc-400 hover:border-zinc-600 transition-colors">tailwind</span>
-                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500 hover:text-zinc-400 hover:border-zinc-600 transition-colors">shadcn</span>
-                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500 hover:text-zinc-400 hover:border-zinc-600 transition-colors">react</span>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500">ui</span>
+                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500">design</span>
+                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500">tailwind</span>
+                    <span class="px-2 py-1 text-[0.6rem] uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-500">shadcn</span>
                 </div>
 
-                <div class="bg-zinc-950 border border-zinc-800 p-4 mb-6 relative">
-                    <span class="absolute -top-2 right-4 text-[0.55rem] uppercase tracking-wider text-zinc-600 bg-zinc-950 px-2">Install</span>
-                    <span class="text-accent">&gt;</span>
-                    <span class="text-zinc-100 ml-2">/plugin install</span>
-                    <span class="text-zinc-400 ml-2">ui-polish@opkod-france</span>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-4 md:gap-6 text-xs text-zinc-500">
+                <div class="flex flex-wrap items-center gap-4 text-xs text-zinc-500">
                     <a href="https://github.com/opkod-france/claude-skill-refactoring-ui" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-zinc-400 hover:text-accent transition-colors">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -207,26 +124,22 @@
                         Repository
                     </a>
                     <span>by Ayoub Hidri</span>
-                    <span>MIT License</span>
+                    <span>MIT</span>
                 </div>
             </article>
         </section>
 
         <!-- Footer -->
         <footer class="py-8 border-t border-zinc-800">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="font-serif text-xl">OPKOD France</div>
-                <nav class="flex gap-8 text-xs">
-                    <a href="https://github.com/opkod-france" target="_blank" rel="noopener" class="text-zinc-500 hover:text-zinc-100 transition-colors">GitHub</a>
-                    <a href="https://github.com/opkod-france/claude-plugins-marketplace" target="_blank" rel="noopener" class="text-zinc-500 hover:text-zinc-100 transition-colors">Source</a>
-                </nav>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
+                <span>OPKOD France</span>
+                <a href="https://github.com/opkod-france/claude-plugins-marketplace" target="_blank" rel="noopener" class="hover:text-zinc-100 transition-colors">Source on GitHub</a>
             </div>
         </footer>
     </div>
 
     <script>
-        function copyInstall(btn) {
-            const cmd = '/plugin marketplace add opkod-france/claude-plugins-marketplace';
+        function copy(btn, cmd) {
             navigator.clipboard.writeText(cmd).then(() => {
                 btn.textContent = 'Copied!';
                 btn.classList.add('border-accent', 'text-accent');
