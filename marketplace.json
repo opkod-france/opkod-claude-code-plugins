@@ -1,0 +1,29 @@
+{
+  "$schema": "https://cdn.jsdelivr.net/gh/anthropics/claude-code@main/packages/plugin-marketplace/marketplace.schema.json",
+  "name": "opkod-marketplace",
+  "description": "Claude Code plugins by OPKOD France - Professional tools for AI-assisted development",
+  "owner": {
+    "name": "OPKOD France",
+    "url": "https://github.com/opkod-france"
+  },
+  "metadata": {
+    "homepage": "https://opkod-france.github.io/claude-plugins-marketplace",
+    "repository": "https://github.com/opkod-france/claude-plugins-marketplace"
+  },
+  "plugins": [
+    {
+      "name": "ui-polish",
+      "source": "https://raw.githubusercontent.com/opkod-france/claude-skill-refactoring-ui/main/.claude-plugin",
+      "description": "Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology to create polished, professional interfaces.",
+      "version": "0.1.0",
+      "category": "frontend",
+      "tags": ["ui", "design", "tailwind", "shadcn", "react", "frontend"],
+      "author": {
+        "name": "Ayoub Hidri"
+      },
+      "homepage": "https://github.com/opkod-france/claude-skill-refactoring-ui",
+      "repository": "https://github.com/opkod-france/claude-skill-refactoring-ui",
+      "license": "MIT"
+    }
+  ]
+}
