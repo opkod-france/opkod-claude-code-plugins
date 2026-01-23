@@ -269,6 +269,59 @@
             color: var(--accent);
         }
 
+        /* Usage section */
+        .usage-section {
+            margin-bottom: 5rem;
+            animation: fadeSlideIn 0.6s ease-out 0.35s backwards;
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .usage-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .usage-number {
+            font-size: 0.65rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .usage-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .usage-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .usage-code {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .usage-code .accent {
+            color: var(--accent);
+        }
+
         /* Plugins section */
         .plugins-section {
             margin-bottom: 6rem;
@@ -565,6 +618,34 @@
                         <span class="terminal-arg">https://opkod-france.github.io/claude-plugins-marketplace/plugins/ui-polish</span>
                         <span class="cursor"></span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Use -->
+        <section class="usage-section">
+            <div class="section-label">Managing Plugins</div>
+
+            <div class="usage-grid">
+                <div class="usage-item">
+                    <div class="usage-number">01</div>
+                    <h3 class="usage-title">Install</h3>
+                    <p class="usage-desc">Add any plugin from this marketplace</p>
+                    <code class="usage-code">claude plugins add <span class="accent">&lt;url&gt;</span></code>
+                </div>
+
+                <div class="usage-item">
+                    <div class="usage-number">02</div>
+                    <h3 class="usage-title">List</h3>
+                    <p class="usage-desc">View all installed plugins</p>
+                    <code class="usage-code">claude plugins list</code>
+                </div>
+
+                <div class="usage-item">
+                    <div class="usage-number">03</div>
+                    <h3 class="usage-title">Remove</h3>
+                    <p class="usage-desc">Uninstall a plugin by name</p>
+                    <code class="usage-code">claude plugins remove <span class="accent">&lt;name&gt;</span></code>
                 </div>
             </div>
         </section>
