@@ -7,6 +7,22 @@ description: Professional UI design principles using Tailwind CSS and shadcn/ui.
 
 Apply professional design principles using Tailwind's design system and shadcn/ui components.
 
+## Context Matters: Identify Your Project Type
+
+Different contexts require different design approaches. Before applying patterns, identify your context:
+
+| Aspect | Marketing/Landing | SaaS/Admin Dashboard |
+|--------|-------------------|---------------------|
+| **Goal** | Convert visitors | Enable productivity |
+| **Users** | First-time visitors | Repeated daily use |
+| **Forms** | Minimal (2-4 fields) | Complex multi-field |
+| **Layout** | Single-column only | Multi-column OK |
+| **Errors** | Prevent abandonment | Offer undo/recovery |
+
+**Quick decision:** Is the user here once or daily? Once → optimize for conversion. Daily → optimize for efficiency.
+
+See **[saas-patterns.md](references/saas-patterns.md)** for SaaS-specific patterns: modals vs sheets vs pages, confirmation dialogs, CRUD tables, empty states, and loading patterns.
+
 ## Core Principles
 
 1. **Start with functionality, not chrome** - Design the feature first, not the shell
@@ -16,6 +32,7 @@ Apply professional design principles using Tailwind's design system and shadcn/u
 
 ## Topic References
 
+### Foundation
 - **[shadcn.md](references/shadcn.md)** - Component patterns, composition, customization
 - **[hierarchy.md](references/hierarchy.md)** - Visual hierarchy, emphasis, contrast
 - **[spacing.md](references/spacing.md)** - Layout, whitespace, sizing
@@ -23,6 +40,10 @@ Apply professional design principles using Tailwind's design system and shadcn/u
 - **[color.md](references/color.md)** - Palettes, shades, accessibility
 - **[depth.md](references/depth.md)** - Shadows, elevation, layering
 - **[polish.md](references/polish.md)** - Finishing touches, borders, backgrounds
+
+### Specialized
+- **[forms.md](references/forms.md)** - Form design, validation, multi-step, mobile optimization
+- **[saas-patterns.md](references/saas-patterns.md)** - Modal/sheet/page decisions, confirmations, CRUD tables, lists, empty states
 
 ## Quick Start with shadcn/ui
 
@@ -90,7 +111,8 @@ npx shadcn@latest add button card input label
 
 ### Form with Labels
 ```tsx
-<div className="space-y-4">
+// Single-column layout (always preferred)
+<form className="space-y-6 max-w-md">
   <div className="space-y-2">
     <Label htmlFor="email">Email</Label>
     <Input id="email" type="email" placeholder="you@example.com" />
@@ -98,9 +120,13 @@ npx shadcn@latest add button card input label
   <div className="space-y-2">
     <Label htmlFor="password">Password</Label>
     <Input id="password" type="password" />
+    <p className="text-sm text-muted-foreground">At least 8 characters</p>
   </div>
-</div>
+  <Button type="submit" className="w-full">Sign In</Button>
+</form>
 ```
+
+See **[forms.md](references/forms.md)** for multi-step forms, validation, and mobile optimization.
 
 ### Alert Messages
 ```tsx
@@ -126,3 +152,24 @@ npx shadcn@latest add button card input label
 - ❌ Not using `space-y-*` or `gap-*` for consistent spacing
 - ❌ Arbitrary Tailwind values like `w-[423px]` (use scale)
 - ❌ Grey text on colored backgrounds (use same-hue shades)
+
+## Quick Decision: Modal vs Sheet vs Page
+
+```
+Is this a confirmation/alert? → Modal
+Need to reference background content? → Sheet/Drawer
+Complex form (>5 fields)? → Full Page or Drawer
+Quick edit (1-3 fields)? → Inline or small Modal
+Settings/filters panel? → Drawer
+```
+
+## Quick Decision: Confirmation Pattern
+
+```
+Easily undone (archive, tag)? → Toast with undo
+Moderate impact (delete draft)? → Simple modal
+High impact (remove user)? → Modal with consequences
+Irreversible (delete account)? → Type-to-confirm
+```
+
+See **[saas-patterns.md](references/saas-patterns.md)** for full decision frameworks and code examples.
