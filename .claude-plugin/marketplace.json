@@ -24,6 +24,34 @@
       "homepage": "https://opkod-france.github.io/opkod-claude-code-plugins",
       "repository": "https://github.com/opkod-france/opkod-claude-code-plugins",
       "license": "MIT"
+    },
+    {
+      "name": "strapi-plugin-dev",
+      "source": "./plugins/strapi-plugin-dev",
+      "description": "Strapi v5 plugin development patterns — Document Service API, factory patterns, React Hook Form + Zod, TanStack Query v5, Content Manager integration.",
+      "version": "1.0.0",
+      "category": "backend",
+      "tags": ["strapi", "plugin", "cms", "typescript", "react", "backend"],
+      "author": {
+        "name": "Ayoub Hidri"
+      },
+      "homepage": "https://opkod-france.github.io/opkod-claude-code-plugins",
+      "repository": "https://github.com/opkod-france/claude-skill-strapi-plugin-dev",
+      "license": "MIT"
+    },
+    {
+      "name": "strapi-ui-design",
+      "source": "./plugins/strapi-ui-design",
+      "description": "Strapi v5 admin UI design — Design System v2 compound components, page layouts, tables, forms, modals, accessibility patterns.",
+      "version": "1.0.0",
+      "category": "frontend",
+      "tags": ["strapi", "ui", "design-system", "react", "admin", "frontend"],
+      "author": {
+        "name": "Ayoub Hidri"
+      },
+      "homepage": "https://opkod-france.github.io/opkod-claude-code-plugins",
+      "repository": "https://github.com/opkod-france/claude-skill-strapi-ui-design",
+      "license": "MIT"
     }
   ]
 }

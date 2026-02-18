@@ -1,0 +1,11 @@
+{
+  "name": "strapi-ui-design",
+  "version": "1.0.0",
+  "description": "Strapi v5 admin UI design — Design System v2 compound components, page layouts, tables, forms, modals, accessibility patterns.",
+  "author": {
+    "name": "Ayoub Hidri",
+    "email": "ayhid@users.noreply.github.com"
+  },
+  "repository": "https://github.com/opkod-france/claude-skill-strapi-ui-design",
+  "license": "MIT"
+}
