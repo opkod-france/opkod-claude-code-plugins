@@ -1,12 +1,34 @@
 ---
 name: strapi-ui-design
 description: Create polished, accessible Strapi v5 plugin admin interfaces using the Strapi Design System exclusively. Use this skill when building plugin settings pages, custom panels, modals, forms, tables, and dashboards for Strapi admin panel extensions.
-allowed-tools: Read, Grep, Glob, Edit, Write, WebFetch
+allowed-tools: Read, Grep, Glob, Edit, Write, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
 ---
 
 This skill guides creation of production-grade Strapi v5 plugin interfaces using the Strapi Design System v2 exclusively. Implement real working code with exceptional attention to consistency, accessibility, and Strapi's visual language.
 
 The user provides admin interface requirements: a settings page, data table, form, modal, dashboard, or custom panel. They may include context about the plugin's purpose and user workflow.
+
+## Live Documentation Verification (Context7)
+
+You have access to Context7 for verifying component APIs and patterns against the latest Strapi Design System documentation.
+
+**When to query Context7:**
+- Before using a Design System component whose props you're uncertain about
+- When the user asks about a component not covered in the bundled patterns
+- When checking for new or renamed components in the latest DS version
+- When verifying compound component slot patterns (Field.Root, Modal.Root, Dialog.Root, etc.)
+
+**Pre-resolved library IDs (skip resolve-library-id for these):**
+- `/strapi/design-system` — Strapi Design System v2 component docs
+- `/strapi/documentation` — Official Strapi v5 docs (for admin hooks like `useFetchClient`, `useNotification`, `Layouts`, `Page`)
+
+**Example queries:**
+- `query-docs("/strapi/design-system", "Table component props columns rows")` — verify Table API
+- `query-docs("/strapi/design-system", "Field compound component Label Hint Error")` — check Field pattern
+- `query-docs("/strapi/design-system", "Modal Root Content Header Body Footer")` — verify Modal slots
+- `query-docs("/strapi/documentation", "admin panel useFetchClient useNotification hooks")` — check admin hooks
+
+**Important:** The patterns in this skill's `patterns.md` and `examples.md` are your primary reference. Use Context7 to **supplement and verify**, not as a first resort — it adds latency. Prefer the bundled patterns for common operations.
 
 ## Design Thinking for Strapi Admin
 
