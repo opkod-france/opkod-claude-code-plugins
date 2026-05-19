@@ -14,7 +14,7 @@
     {
       "name": "ui-polish",
       "source": "./plugins/ui-polish",
-      "description": "Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology to create polished, professional interfaces.",
+      "description": "Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology — now with /refactor and /review commands plus a ui-reviewer sub-agent for context-isolated reviews.",
       "version": "0.1.0",
       "category": "frontend",
       "tags": ["ui", "design", "tailwind", "shadcn", "react", "frontend"],
@@ -28,7 +28,7 @@
     {
       "name": "strapi-plugin-dev",
       "source": "./plugins/strapi-plugin-dev",
-      "description": "Strapi v5 plugin development patterns — Document Service API, factory patterns, React Hook Form + Zod, TanStack Query v5, Content Manager integration.",
+      "description": "Strapi v5 plugin development — Document Service API, factory patterns, RHF+Zod, TanStack Query v5. Includes auto-firing hooks (anti-pattern detection, schema validation, context injection), slash commands (/strapi-scaffold-plugin, /strapi-add-content-type, /strapi-add-cm-panel, /strapi-verify), and a strapi-reviewer sub-agent.",
       "version": "1.0.0",
       "category": "backend",
       "tags": ["strapi", "plugin", "cms", "typescript", "react", "backend"],
@@ -42,7 +42,7 @@
     {
       "name": "strapi-ui-design",
       "source": "./plugins/strapi-ui-design",
-      "description": "Strapi v5 admin UI design — Design System v2 compound components, page layouts, tables, forms, modals, accessibility patterns.",
+      "description": "Strapi v5 admin UI design — DS v2 compound components, page layouts, tables, forms, modals, accessibility. Includes a PostToolUse hook that flags DS violations in admin/src/**/*.tsx, slash commands (/strapi-ui-component, /strapi-ui-audit), and a strapi-ui-reviewer sub-agent.",
       "version": "1.0.0",
       "category": "frontend",
       "tags": ["strapi", "ui", "design-system", "react", "admin", "frontend"],
