@@ -1,58 +1,26 @@
 ---
 description: Refactor a UI component applying Refactoring UI design principles
 argument-hint: [file-path]
-allowed-tools: Read, Edit, Write, Glob, Grep
+allowed-tools: Read, Edit, Glob, Grep
+model: claude-sonnet-4-5
 ---
 
-Refactor the UI component at @$1 applying Refactoring UI principles and the refactoring-ui skill.
+Refactor the UI component at @$1 using the **refactoring-ui** skill (load it for full criteria, anti-patterns, and component patterns).
 
-## Refactoring Process
+## Process
 
-1. **Read and Understand**: First, read the component to understand its purpose and current implementation.
-
-2. **Identify Improvements**: Look for these common issues:
-   - Poor visual hierarchy (everything competing for attention)
-   - Inconsistent or inadequate spacing
-   - Incorrect button variant usage
-   - Missing form labels
-   - Arbitrary Tailwind values instead of scale
-   - Grey text on colored backgrounds
-   - Overridden shadcn styles
-
-3. **Apply Changes**: Make targeted improvements following these priorities:
-
-   **High Priority:**
-   - Fix button hierarchy (one primary per section)
-   - Add missing Labels to form inputs
-   - Replace arbitrary values with Tailwind scale
-   - Fix grey text on colored backgrounds
-
-   **Medium Priority:**
-   - Improve spacing consistency (use `space-y-*`, `gap-*`)
-   - Establish clear text color hierarchy (gray-900, gray-600, gray-400)
-   - Add appropriate max-width constraints
-
-   **Lower Priority:**
-   - De-emphasize labels when values are self-evident
-   - Soften icon colors to balance with text
-   - Add subtle polish (borders, shadows, rounded corners)
-
-4. **Preserve Functionality**: Do not change component logic, state management, or data handling. Only modify styling and layout.
-
-## Guidelines
-
-- Use Tailwind's spacing scale, not arbitrary values
-- Use shadcn/ui component variants as intended
-- Prefer `text-muted-foreground` for secondary text
-- Use `space-y-*` for vertical rhythm, `gap-*` for flex/grid
-- Keep changes focused and minimal - don't over-engineer
+1. Read the component and understand its purpose.
+2. Apply Refactoring UI priorities from the skill:
+   - **High**: button hierarchy, missing form labels, arbitrary Tailwind values, grey-on-color text.
+   - **Medium**: spacing consistency (`space-y-*`, `gap-*`), text color hierarchy, max-width.
+   - **Low**: de-emphasis, icon balance, polish.
+3. Preserve all logic — only modify styling and layout.
 
 ## Output
 
-After making changes:
+After editing:
+- 2–4 bullets summarizing key changes.
+- Trade-offs that need user review.
+- Anything you couldn't fix due to missing context.
 
-1. Briefly explain the key changes made (2-4 bullet points)
-2. Highlight any trade-offs or decisions that might need user review
-3. If you couldn't improve something due to missing context, mention it
-
-Focus on high-impact changes. A few meaningful improvements are better than many minor tweaks.
+Focus on high-impact changes. A few meaningful improvements beat many minor tweaks. Read-only refactoring of styling — do NOT create new files.

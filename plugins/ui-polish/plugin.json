@@ -2,10 +2,20 @@
   "name": "ui-polish",
   "version": "0.1.0",
   "description": "Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology to create polished, professional interfaces.",
+  "keywords": [
+    "ui",
+    "tailwind",
+    "shadcn",
+    "react",
+    "design-system",
+    "refactoring-ui"
+  ],
   "author": {
     "name": "Ayoub Hidri",
-    "email": "ayhid@users.noreply.github.com"
+    "email": "ayoub.hidri@gmail.com",
+    "url": "https://www.linkedin.com/in/ayoub-hidri-67a29428/"
   },
+  "homepage": "https://github.com/opkod-france/opkod-claude-code-plugins",
   "repository": "https://github.com/opkod-france/opkod-claude-code-plugins",
   "license": "MIT"
 }
