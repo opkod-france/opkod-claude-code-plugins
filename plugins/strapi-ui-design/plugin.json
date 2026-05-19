@@ -1,6 +1,6 @@
 {
   "name": "strapi-ui-design",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Strapi v5 admin UI design — Design System v2 compound components, page layouts, tables, forms, modals, accessibility. Includes a PostToolUse hook that flags DS violations in admin/src/**/*.tsx, commands (/strapi-ui-component, /strapi-ui-audit), and a strapi-ui-reviewer sub-agent.",
   "author": {
     "name": "Ayoub Hidri",
