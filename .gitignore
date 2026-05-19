@@ -2,3 +2,4 @@
 *.local
 .env
 node_modules/
+.claude/
