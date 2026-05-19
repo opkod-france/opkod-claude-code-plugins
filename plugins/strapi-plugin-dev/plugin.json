@@ -1,10 +1,11 @@
 {
   "name": "strapi-plugin-dev",
   "version": "1.0.0",
-  "description": "Strapi v5 plugin development patterns — Document Service API, factory patterns, React Hook Form + Zod, TanStack Query v5, Content Manager integration.",
+  "description": "Strapi v5 plugin development — Document Service API, factory patterns, RHF+Zod, TanStack Query v5. Includes hooks (anti-pattern detection, schema validation, context injection), commands (/strapi-scaffold-plugin, /strapi-add-content-type, /strapi-add-cm-panel, /strapi-verify), and a strapi-reviewer sub-agent.",
   "author": {
     "name": "Ayoub Hidri",
-    "email": "ayhid@users.noreply.github.com"
+    "email": "ayoub.hidri@gmail.com",
+    "url": "https://www.linkedin.com/in/ayoub-hidri-67a29428/"
   },
   "repository": "https://github.com/opkod-france/claude-skill-strapi-plugin-dev",
   "license": "MIT"
