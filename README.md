@@ -1,95 +1,109 @@
 # OPKOD Claude Code Plugins
 
-Claude Code plugin marketplace by OPKOD France.
+Claude Code plugin marketplace by OPKOD France. Three plugins so far: UI refactoring with Tailwind and shadcn, Strapi v5 plugin scaffolding, and Strapi admin UI design.
 
-## Setup
+## Install
 
 ```bash
-# 1. Add the marketplace
 /plugin marketplace add opkod-france/opkod-claude-code-plugins
-
-# 2. Update the marketplace
 /plugin marketplace update opkod-marketplace
-
-# 3. Install a plugin
 /plugin install <plugin-name>@opkod-marketplace
 ```
 
-Or browse with `/plugin` → Discover tab.
+Or browse with `/plugin` and pick from the Discover tab.
 
-## Available Plugins
+## Plugins
 
-| Plugin | Category | Description |
-|--------|----------|-------------|
-| [ui-polish](#ui-polish) | Frontend | Refactoring UI methodology with Tailwind CSS and shadcn/ui |
-| [strapi-plugin-dev](#strapi-plugin-dev) | Backend | Strapi v5 plugin development patterns |
-| [strapi-ui-design](#strapi-ui-design) | Frontend | Strapi v5 admin UI with Design System v2 |
+| Plugin | What it does | Install |
+|--------|--------------|---------|
+| [ui-polish](#ui-polish) | Refactor and review Tailwind + shadcn UI using Refactoring UI principles | `/plugin install ui-polish@opkod-marketplace` |
+| [strapi-plugin-dev](#strapi-plugin-dev) | Build Strapi v5 plugins with Document Service, factories, RHF + Zod, TanStack Query | `/plugin install strapi-plugin-dev@opkod-marketplace` |
+| [strapi-ui-design](#strapi-ui-design) | Build Strapi v5 admin UI using only the Strapi Design System v2 | `/plugin install strapi-ui-design@opkod-marketplace` |
 
 ### ui-polish
 
-Professional UI design principles using Tailwind CSS and shadcn/ui. Apply Refactoring UI methodology to create polished, professional interfaces.
+For React projects using Tailwind and shadcn/ui. Spots design issues and refactors components in place.
 
-```bash
-/plugin install ui-polish@opkod-marketplace
+**Usage**
+
+```text
+/refactor src/components/SignupForm.tsx
+/review src/components/Pricing.tsx
 ```
 
-**Components:**
-- **Skill**: `refactoring-ui` — Refactoring UI principles for Tailwind + shadcn (hierarchy, spacing, typography, color, shadcn patterns)
-- **Commands**: `/refactor <file>`, `/review <file>`
-- **Agent**: `ui-reviewer` — context-isolated UI reviews for `.tsx`/`.jsx` files
+Or just describe what you want. The `refactoring-ui` skill auto-triggers on prompts like "make this look better" or "the spacing here feels off."
+
+**What you get**
+
+- Skill `refactoring-ui` covers hierarchy, spacing, typography, color, shadcn patterns, and common anti-patterns
+- Commands `/refactor <file>` (edits in place) and `/review <file>` (read-only audit)
+- Agent `ui-reviewer` for context-isolated multi-file reviews. Skips Strapi admin code, which has its own reviewer.
 
 ### strapi-plugin-dev
 
-Strapi v5 plugin development expert — Document Service API, factory patterns (`createCoreService`, `createCoreController`, `createCoreRouter`), React Hook Form + Zod, TanStack Query v5, Content Manager integration.
+For Strapi v5 plugin development. Knows Document Service API, factory patterns, route conventions, and the modern admin stack (RHF + Zod, TanStack Query v5, Content Manager injection). Verifies against the latest docs via Context7.
 
-Uses **Context7** for live documentation verification against the latest Strapi v5 docs.
+**Usage**
 
-```bash
-/plugin install strapi-plugin-dev@opkod-marketplace
+```text
+/strapi-scaffold-plugin my-plugin
+/strapi-add-content-type task
+/strapi-add-cm-panel TodoPanel
+/strapi-verify
 ```
 
-**Components:**
-- **Skill**: `strapi-plugin-dev` — router skill pointing to `patterns.md` (factory deep-dive, RHF+Zod, TanStack v5, CM injection, RBAC, polymorphic relations) and `examples.md` (end-to-end walkthroughs)
-- **Commands**:
-  - `/strapi-scaffold-plugin <name>` — opinionated plugin scaffold on top of `@strapi/sdk-plugin`
-  - `/strapi-add-content-type <name>` — schema + factory service/controller/router + registration
-  - `/strapi-add-cm-panel <name>` — Content Manager right-links injection panel
-  - `/strapi-verify` — runs official verify + anti-pattern grep
-- **Hooks** (auto-firing):
-  - `PostToolUse` on `server/src/**/*.ts` → flags `entityService`, `strapi.query`, `Formik`, `Yup`, `react-query` v3
-  - `PostToolUse` on `*/content-types/*/schema.json` → validates required fields (`kind`, `singularName`, `pluralName`, `collectionName`)
-  - `UserPromptSubmit` → injects Strapi v5 context preamble when cwd is a plugin
-- **Agent**: `strapi-reviewer` — auto-delegated for reviews under `server/src/` or `admin/src/`
+You can also just ask. Inside a Strapi plugin directory, the plugin auto-injects context on every prompt so Claude reaches for the right APIs without you having to remind it.
+
+**Automatic checks**
+
+When you (or Claude) edit files inside a Strapi plugin, these run automatically:
+
+- On `server/src/**/*.ts`: flags `strapi.entityService`, `strapi.query` for CRUD, Formik, Yup, `react-query` v3
+- On `*/content-types/*/schema.json`: checks `kind`, `singularName`, `pluralName`, `collectionName`
+- On prompt submit inside a plugin directory: injects a Strapi v5 context preamble
+
+**Reviews**
+
+The `strapi-reviewer` agent runs full v5-conformance reviews. Invoke it explicitly or let the general code reviewer delegate to it for files under `server/src/` or `admin/src/`.
 
 ### strapi-ui-design
 
-Create polished, accessible Strapi v5 plugin admin interfaces using the Strapi Design System v2 exclusively. Compound components, `Page.*` + `Layouts.*` shell, tables, forms, modals, RBAC, and accessibility patterns.
+Companion to `strapi-plugin-dev` for the UI half. Uses `@strapi/design-system` v2 exclusively. Covers `Page.*` and `Layouts.*` shell, Field compound API, tables, modals, RBAC, and the v2 component catalog (47 components). Verifies against live DS docs via Context7.
 
-Uses **Context7** for live documentation verification against the latest Design System docs.
+**Usage**
 
-```bash
-/plugin install strapi-ui-design@opkod-marketplace
+```text
+/strapi-ui-component settings PluginSettings
+/strapi-ui-component table TaskList
+/strapi-ui-component form CreateTaskForm
+/strapi-ui-component modal ConfirmDelete
+/strapi-ui-component dashboard Overview
+/strapi-ui-audit
 ```
 
-**Components:**
-- **Skill**: `strapi-ui-design` — DS v2 component catalog (47 components + `Page.*` + `Layouts.*`), Field/data-fetching/RBAC patterns, anti-patterns
-- **Commands**:
-  - `/strapi-ui-component <type> [name]` — scaffold a `settings | table | form | modal | dashboard` page using DS v2 templates
-  - `/strapi-ui-audit` — one-shot DS-violation report across `admin/src/**/*.tsx`
-- **Hook** (auto-firing):
-  - `PostToolUse` on `admin/src/**/*.tsx` → flags native HTML, `styled-components`, inline styles, hex colors, `alert()`, deprecated `ModalLayout`, path imports
-- **Agent**: `strapi-ui-reviewer` — DS conformance + accessibility reviews (Field.Root wrapping, IconButton labels, Page/Layouts shell)
+**Automatic checks**
+
+On every edit to `admin/src/**/*.tsx`, flags:
+
+- Native HTML (`<button>`, `<input>`, `<select>`, `<textarea>`)
+- `styled-components` imports
+- Inline `style={{...}}`
+- Hardcoded hex colors
+- `alert()` and `window.confirm()`
+- The deprecated v4 `ModalLayout` component
+- Path imports like `@strapi/design-system/Button`
+
+**Reviews**
+
+The `strapi-ui-reviewer` agent checks DS conformance and accessibility: `Field.Root` wrapping, `IconButton` labels, `Page.Main` + `Layouts.*` shell, focus trap on modals, semantic `Status` over raw `Badge`.
 
 ## Releases
 
-Per-plugin versioning is automated via `.github/workflows/release-per-plugin.yml`.
-Each push to `main` is scanned for conventional-commit scopes; matching plugins
-get their `plugin.json` + marketplace entry bumped, a `<plugin>-vX.Y.Z` tag is
-created, and a GitHub release is published with a scoped changelog.
+Versioning is per-plugin and automatic. Push to `main` with a conventional-commit scope, and the release workflow bumps that plugin's `plugin.json`, updates `marketplace.json`, tags it as `<plugin>-vX.Y.Z`, and publishes a GitHub release with a scoped changelog. No manual version edits.
 
-**Commit message convention (required for releases):**
+The convention:
 
-| Commit | Effect on `<plugin>` |
+| Commit subject | Result |
 |---|---|
 | `feat(<plugin>): ...` | minor bump |
 | `fix(<plugin>): ...` | patch bump |
@@ -97,39 +111,46 @@ created, and a GitHub release is published with a scoped changelog.
 | `refactor(<plugin>): ...` | patch bump |
 | `feat(<plugin>)!: ...` or `BREAKING CHANGE:` in body | major bump |
 | `docs(<plugin>): ...`, `chore(<plugin>): ...`, `test(<plugin>): ...` | no release |
-| commits without a `(<plugin>)` scope | no release (use the manual `Semantic Release (repo-wide)` workflow if needed) |
+| No `(<plugin>)` scope | no release. Use the manual `Semantic Release (repo-wide)` workflow if you need a repo-level tag. |
 
-The workflow's own commits use `[skip ci]` to avoid recursion. The legacy
-repo-wide `release.yml` is now manual-only via `workflow_dispatch`.
+**Examples**
 
-### Enforcement (defense in depth)
+```text
+feat(ui-polish): add /preview command for live render
+fix(strapi-plugin-dev): handle morphToMany junction lookup
+refactor(strapi-ui-design)!: rename Layouts.Action to Layouts.HeaderActions
+chore: bump CI Node version
+```
 
-Three layers prevent the conventions from drifting:
+The workflow's own release commits include `[skip ci]` so they do not retrigger.
 
-1. **Local git hook** (`.githooks/commit-msg`) — rejects bad messages at commit
-   time, before they exist. Activate per clone with:
+### Enforcement
+
+Four layers stop the convention from drifting:
+
+1. **Local commit-msg hook** at `.githooks/commit-msg`. Rejects bad messages before they exist. Activate once per clone:
 
    ```bash
    ./.githooks/install.sh
    ```
 
-   It enforces: known conventional type, kebab-case scope, scope-must-exist,
-   scope-required-when-touching-`plugins/<name>/`, no scope mismatch, header
-   ≤100 chars, no multi-plugin commits.
+   Enforces type whitelist, kebab-case scope, scope must match a real plugin or be on the small allowlist (`deps`, `release`, `marketplace`, `hooks`, `workflows`, `readme`), scope required when staged files touch `plugins/<name>/`, no multi-plugin commits, subject under 100 chars.
 
-2. **Local pre-commit hook** (`.githooks/pre-commit`) — runs the plugin lint
-   scripts (`check-strapi-server.sh`, `check-strapi-schema.sh`,
-   `check-admin-tsx.sh`) against staged files so manual commits get the same
-   checks Claude's PostToolUse hooks apply.
+2. **Local pre-commit hook** at `.githooks/pre-commit`. Runs the plugin lint scripts on staged files, mirroring the PostToolUse checks Claude runs during edits.
 
-3. **CI** (`.github/workflows/commitlint.yml`) — runs `@commitlint/cli` against
-   PR commits and pushes to main. Catches anyone who didn't install the local
-   hook. Config in `.commitlintrc.cjs` mirrors the local rules.
+3. **CI commitlint** at `.github/workflows/commitlint.yml`. Re-runs the same rules on every PR and push, so contributors who skipped the local install still get caught.
 
-4. **Release workflow degradation** — when a push produces no bumps, the
-   release workflow lists every commit since the last per-plugin tag in its
-   GitHub Actions summary, highlighting which ones missed a scope. Silent skips
-   are visible.
+4. **Release workflow summary** in `release-per-plugin.yml`. When a push produces no bumps, the Actions summary lists every commit since the last per-plugin tag and flags which ones missed a scope. Silent skips stay visible.
+
+## Contributing
+
+```bash
+git clone https://github.com/opkod-france/opkod-claude-code-plugins.git
+cd opkod-claude-code-plugins
+./.githooks/install.sh
+```
+
+That last step is the one easy thing to forget. The CI commitlint job will tell you if you did.
 
 ## License
 
