@@ -1,6 +1,6 @@
 ---
 name: strapi-ui-design
-description: Create polished, accessible Strapi v5 plugin admin interfaces using the Strapi Design System exclusively. Use this skill when building plugin settings pages, custom panels, modals, forms, tables, and dashboards for Strapi admin panel extensions.
+description: Create polished, accessible Strapi v5 plugin admin interfaces using the Strapi Design System exclusively. Use this skill when building, revamping, or refactoring plugin admin pages including settings pages, custom panels, modals, forms, tables, and dashboards. Also invoke when the user mentions Strapi design guidelines, Layouts, LayoutHeader, LayoutContent, Main, Box, or any Strapi Design System components.
 allowed-tools: Read, Grep, Glob, Edit, Write, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
 ---
 
@@ -58,6 +58,22 @@ Then implement working code (React + TypeScript) that is:
 - `Grid.Root` / `Grid.Item` - CSS Grid layouts
 - `Divider` - Visual separator
 - `Card` - Elevated content container
+
+**Page Shell (from `@strapi/strapi/admin`):**
+- `Page.Main` - Top-level admin page wrapper (includes loading/error boundary)
+- `Page.Title` - Sets document title (preferred over `<title>`)
+- `Page.Error` - Renders the admin-standard error page
+- `Page.NoPermissions` - Renders the admin-standard "no access" page
+- `Page.Loading` - Renders the admin-standard loading state
+- `Page.Protect` - Permission gate, pair with `useRBAC()`
+
+**Layouts (from `@strapi/strapi/admin`):**
+- `Layouts.Root` - Main layout wrapper
+- `Layouts.Header` - Page header with title/subtitle/actions
+- `Layouts.Content` - Main content area with proper padding
+- `Layouts.Action` - Action buttons slot in the header
+
+Prefer `Page.Main` + `Layouts.*` over hand-rolled `<Main>` + `<Box>` wrappers — they ensure consistency with Strapi's core pages.
 
 **Typography:**
 - `Typography` - Text with variant prop (alpha, beta, omega, pi, sigma, epsilon, delta)
@@ -176,10 +192,24 @@ Always use React Query with Strapi's useFetchClient:
 
 ```tsx
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useFetchClient, useNotification } from '@strapi/strapi/admin';
+import { useFetchClient, useNotification, useAPIErrorHandler } from '@strapi/strapi/admin';
 
 const { get, post, put, del } = useFetchClient();
 const { toggleNotification } = useNotification();
+const { formatAPIError } = useAPIErrorHandler();
+```
+
+### Permission-Gated UI
+
+Use `useRBAC()` for admin-side permission checks. Wrap protected routes with `Page.Protect`:
+
+```tsx
+import { useRBAC, Page } from '@strapi/strapi/admin';
+
+const { allowedActions: { canRead, canUpdate } } = useRBAC({
+  read: [{ action: 'plugin::my-plugin.read', subject: null }],
+  update: [{ action: 'plugin::my-plugin.update', subject: null }],
+});
 ```
 
 ## Anti-Patterns to Avoid
@@ -187,15 +217,18 @@ const { toggleNotification } = useNotification();
 | Anti-Pattern | Correct Approach |
 |--------------|------------------|
 | Custom styled-components | Use Box, Flex, Grid with props |
-| Inline styles | Use spacing/color props |
-| Custom colors | Use theme colors via props |
+| Inline styles (`style={{...}}`) | Use spacing/color props |
+| Custom colors / hex codes | Use theme colors via props |
 | Native HTML buttons | Use Button, IconButton, TextButton |
 | Native HTML inputs | Use TextInput, Select, Checkbox |
-| Custom modals | Use Modal with proper structure |
-| alert() or console | Use useNotification hook |
-| window.confirm | Use Dialog component |
-| Custom loading spinners | Use Loader component |
-| Hardcoded spacing | Use spacing scale (1-10) |
+| Custom modals | Use `Modal.Root` + `Modal.Content` + `Modal.Header` + `Modal.Body` + `Modal.Footer` |
+| **`ModalLayout` (v4)** | **DEPRECATED** — replaced by `Modal.*` compound API in DS v2 |
+| `alert()` or `console.*` for UX | Use `useNotification()` hook |
+| `window.confirm` | Use `Dialog` component |
+| Custom loading spinners | Use `Loader` component |
+| Hardcoded spacing | Use spacing scale (1–10) |
+| Raw `Badge` with `backgroundColor`/`textColor` | Prefer `Status` for semantic status (success/danger/warning), use `Badge` only for non-semantic tags |
+| Hand-rolled `<Main>` + page header | Use `Page.Main` + `Layouts.Header` + `Layouts.Content` |
 
 ## Page Structure Template
 
