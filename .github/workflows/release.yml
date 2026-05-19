@@ -1,8 +1,10 @@
-name: Semantic Release
+name: Semantic Release (repo-wide, manual)
+
+# Repo-wide tags are now manual-only. Per-plugin releases are handled
+# by release-per-plugin.yml on every push to main. Use this workflow
+# only when you want a single repo-level tag for a coordinated milestone.
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,278 @@
+name: Per-Plugin Semantic Release
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-per-plugin
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Skip recursive release commits
+        id: guard
+        env:
+          HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          if [[ "${HEAD_COMMIT_MSG}" == *"[skip ci]"* ]]; then
+            echo "Skipping: head commit contains [skip ci]"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install jq
+        if: steps.guard.outputs.skip != 'true'
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Configure git
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Detect plugins and compute bumps
+        if: steps.guard.outputs.skip != 'true'
+        id: plan
+        run: |
+          set -euo pipefail
+
+          # Enumerate plugins by directory presence.
+          PLUGINS=()
+          for dir in plugins/*/; do
+            [[ -f "${dir}plugin.json" ]] && PLUGINS+=("$(basename "$dir")")
+          done
+
+          if [[ ${#PLUGINS[@]} -eq 0 ]]; then
+            echo "No plugins found"
+            echo "any_bumps=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # plan.txt accumulates per-plugin bump decisions.
+          : > plan.txt
+          ANY_BUMPS=false
+
+          for plugin in "${PLUGINS[@]}"; do
+            echo "::group::Analyze $plugin"
+
+            current_version=$(jq -r '.version' "plugins/${plugin}/plugin.json")
+            tag_prefix="${plugin}-v"
+
+            # Find the most recent tag for this plugin.
+            last_tag=$(git tag --list "${tag_prefix}*" --sort=-v:refname | head -n1 || true)
+
+            if [[ -z "$last_tag" ]]; then
+              range=""
+              echo "No prior tag for $plugin; using full history"
+            else
+              range="${last_tag}..HEAD"
+              echo "Last tag: $last_tag; range: $range"
+            fi
+
+            # Commits touching this plugin's files.
+            if [[ -z "$range" ]]; then
+              commits=$(git log --pretty=format:"%H %s" -- "plugins/${plugin}" || true)
+            else
+              commits=$(git log "$range" --pretty=format:"%H %s" -- "plugins/${plugin}" || true)
+            fi
+
+            if [[ -z "$commits" ]]; then
+              echo "No new commits touching plugins/${plugin}"
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "Commits touching $plugin:"
+            echo "$commits"
+
+            # Determine bump from conventional-commit scope matching this plugin.
+            bump="none"
+
+            if echo "$commits" | grep -qE "^[a-f0-9]+ [a-z]+\(${plugin}\)!:"; then
+              bump="major"
+            elif git log ${range:-} --pretty=format:"%B" -- "plugins/${plugin}" | grep -qE "^BREAKING CHANGE:"; then
+              bump="major"
+            elif echo "$commits" | grep -qE "^[a-f0-9]+ feat\(${plugin}\):"; then
+              bump="minor"
+            elif echo "$commits" | grep -qE "^[a-f0-9]+ (fix|perf|refactor)\(${plugin}\):"; then
+              bump="patch"
+            fi
+
+            if [[ "$bump" == "none" ]]; then
+              echo "No bump-worthy commits for $plugin (no feat/fix/perf/refactor with matching scope)"
+              echo "::endgroup::"
+              continue
+            fi
+
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${current_version}"
+            MAJOR=${MAJOR:-0}; MINOR=${MINOR:-0}; PATCH=${PATCH:-0}
+
+            case "$bump" in
+              major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+              minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+              patch) PATCH=$((PATCH + 1)) ;;
+            esac
+
+            new_version="${MAJOR}.${MINOR}.${PATCH}"
+            echo "Bump: $bump  ${current_version} -> ${new_version}"
+            echo "${plugin}|${current_version}|${new_version}|${bump}|${last_tag}" >> plan.txt
+            ANY_BUMPS=true
+
+            echo "::endgroup::"
+          done
+
+          if [[ "$ANY_BUMPS" == "false" ]]; then
+            echo "No plugins to release"
+            echo "any_bumps=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "any_bumps=true" >> "$GITHUB_OUTPUT"
+          echo "Plan:"
+          cat plan.txt
+
+      - name: Summarize no-op run
+        if: steps.guard.outputs.skip != 'true' && steps.plan.outputs.any_bumps != 'true'
+        run: |
+          set -euo pipefail
+          echo "## No releases this run" >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "No plugin had release-eligible commits (feat/fix/perf/refactor) with a matching scope." >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+
+          for dir in plugins/*/; do
+            [[ -f "${dir}plugin.json" ]] || continue
+            plugin="$(basename "$dir")"
+            tag_prefix="${plugin}-v"
+            last_tag="$(git tag --list "${tag_prefix}*" --sort=-v:refname | head -n1 || true)"
+            range="${last_tag:+${last_tag}..HEAD}"
+
+            commits="$(git log ${range:-} --pretty=format:'- `%h` %s' -- "plugins/${plugin}" 2>/dev/null || true)"
+
+            if [[ -z "$commits" ]]; then
+              echo "### \`${plugin}\` — no commits since ${last_tag:-the beginning}" >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+
+            # Highlight commits that touched the plugin but didn't get a release-eligible scope.
+            skipped="$(echo "$commits" | grep -v -E "^- \`[a-f0-9]+\` (feat|fix|perf|refactor)\(${plugin}\)(!)?:" || true)"
+
+            echo "### \`${plugin}\` — commits since ${last_tag:-the beginning}" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo "$commits" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+
+            if [[ -n "$skipped" ]]; then
+              echo "**Did not trigger a release** (wrong type or missing scope):" >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+              echo "$skipped" >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+              echo "If these should have released, retroactively tag manually or amend the commit message convention going forward." >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+
+      - name: Apply bumps, tag, and release
+        if: steps.guard.outputs.skip != 'true' && steps.plan.outputs.any_bumps == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          while IFS='|' read -r plugin current new bump last_tag; do
+            [[ -z "$plugin" ]] && continue
+            echo "::group::Release ${plugin} v${new}"
+
+            manifest="plugins/${plugin}/plugin.json"
+            marketplace=".claude-plugin/marketplace.json"
+
+            # 1. Bump plugin.json (preserves key order via jq).
+            tmp="$(mktemp)"
+            jq --arg v "$new" '.version = $v' "$manifest" > "$tmp"
+            mv "$tmp" "$manifest"
+
+            # 2. Bump matching entry in marketplace.json.
+            tmp="$(mktemp)"
+            jq --arg name "$plugin" --arg v "$new" \
+              '(.plugins[] | select(.name == $name) | .version) = $v' \
+              "$marketplace" > "$tmp"
+            mv "$tmp" "$marketplace"
+
+            # 3. Build a per-plugin changelog from commits touching this plugin.
+            if [[ -n "$last_tag" ]]; then
+              range="${last_tag}..HEAD"
+            else
+              range=""
+            fi
+
+            commits=$(git log ${range:-} --pretty=format:"- %s (%h)" --reverse -- "plugins/${plugin}" || true)
+
+            breaking=$(echo "$commits" | grep -E "^- [a-z]+\(${plugin}\)!:" || true)
+            features=$(echo "$commits" | grep -E "^- feat\(${plugin}\):" || true)
+            fixes=$(echo "$commits"    | grep -E "^- fix\(${plugin}\):" || true)
+            perf=$(echo "$commits"     | grep -E "^- perf\(${plugin}\):" || true)
+            refactor=$(echo "$commits" | grep -E "^- refactor\(${plugin}\):" || true)
+            docs=$(echo "$commits"     | grep -E "^- docs\(${plugin}\):" || true)
+            chore=$(echo "$commits"    | grep -E "^- chore\(${plugin}\):" || true)
+            other=$(echo "$commits"    | grep -vE "^- [a-z]+\(${plugin}\)(!)?:" || true)
+
+            {
+              echo "## ${plugin} v${new}"
+              echo
+              [[ -n "$breaking" ]] && { echo "### ⚠️ Breaking Changes"; echo; echo "$breaking"; echo; }
+              [[ -n "$features" ]] && { echo "### ✨ Features";          echo; echo "$features"; echo; }
+              [[ -n "$fixes" ]]    && { echo "### 🐛 Bug Fixes";          echo; echo "$fixes";    echo; }
+              [[ -n "$perf" ]]     && { echo "### ⚡ Performance";        echo; echo "$perf";     echo; }
+              [[ -n "$refactor" ]] && { echo "### ♻️ Refactoring";        echo; echo "$refactor"; echo; }
+              [[ -n "$docs" ]]     && { echo "### 📚 Documentation";      echo; echo "$docs";     echo; }
+              [[ -n "$chore" ]]    && { echo "### 🔧 Chores";             echo; echo "$chore";    echo; }
+              [[ -n "$other" ]]    && { echo "### 📝 Other";              echo; echo "$other";    echo; }
+            } > "changelog-${plugin}.md"
+
+            cat "changelog-${plugin}.md"
+
+            git add "$manifest" "$marketplace"
+            echo "::endgroup::"
+          done < plan.txt
+
+          # 4. Single commit covering all bumps this run.
+          {
+            echo "chore(release): bump plugin versions [skip ci]"
+            echo
+            while IFS='|' read -r plugin current new bump last_tag; do
+              [[ -z "$plugin" ]] && continue
+              echo "- ${plugin}: ${current} -> ${new} (${bump})"
+            done < plan.txt
+          } > .release-msg
+
+          git commit -F .release-msg
+          git push origin HEAD:main
+
+          # 5. Tag and release each plugin from the new HEAD.
+          while IFS='|' read -r plugin current new bump last_tag; do
+            [[ -z "$plugin" ]] && continue
+            tag="${plugin}-v${new}"
+            git tag -a "$tag" -m "Release ${plugin} v${new}"
+            git push origin "$tag"
+
+            gh release create "$tag" \
+              --title "${plugin} v${new}" \
+              --notes-file "changelog-${plugin}.md"
+          done < plan.txt

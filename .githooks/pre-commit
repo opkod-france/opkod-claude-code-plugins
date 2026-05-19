@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# pre-commit hook: reuse the plugin lint scripts on staged files so manual
+# commits get the same checks that PostToolUse hooks apply during Claude edits.
+#
+# Activate per-clone with:
+#   git config core.hooksPath .githooks
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+
+# Map plugin lint scripts to the path globs they validate.
+# Each entry: "<glob>|<plugin-script-path>"
+LINT_RULES=(
+  "plugins/strapi-plugin-dev/scripts/check-strapi-server.sh|server/src/*.ts|server/src/*/*.ts"
+  "plugins/strapi-plugin-dev/scripts/check-strapi-schema.sh|server/src/content-types/*/schema.json"
+  "plugins/strapi-ui-design/scripts/check-admin-tsx.sh|admin/src/*.tsx|admin/src/*/*.tsx"
+)
+
+# Note: these scripts target external Strapi plugin repositories (where files
+# live under server/src/ and admin/src/ at the repo root). This local
+# pre-commit hook ONLY catches the rare case where someone vendors such files
+# directly into this plugins repo — typically the path globs won't match here,
+# and the hook is a no-op. The real value of the lint scripts is when they run
+# via Claude PostToolUse hooks in downstream Strapi projects.
+
+staged_files="$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)"
+[[ -z "$staged_files" ]] && exit 0
+
+any_failed=0
+
+while IFS= read -r file; do
+  [[ -z "$file" ]] && continue
+  abs="$repo_root/$file"
+  [[ ! -f "$abs" ]] && continue
+
+  for rule in "${LINT_RULES[@]}"; do
+    IFS='|' read -r -a parts <<< "$rule"
+    script="$repo_root/${parts[0]}"
+    [[ ! -x "$script" ]] && continue
+
+    matched=0
+    for ((i=1; i<${#parts[@]}; i++)); do
+      glob="${parts[i]}"
+      # shellcheck disable=SC2053
+      if [[ "$file" == $glob ]]; then
+        matched=1; break
+      fi
+    done
+    [[ $matched -eq 0 ]] && continue
+
+    # The lint scripts expect a JSON event payload on stdin with file_path.
+    payload="{\"tool_input\":{\"file_path\":\"$abs\"}}"
+    if ! printf '%s' "$payload" | "$script"; then
+      any_failed=1
+    fi
+  done
+done <<< "$staged_files"
+
+if [[ $any_failed -ne 0 ]]; then
+  echo >&2
+  echo >&2 "✖ pre-commit lint failed. Address the warnings above, then re-stage."
+  echo >&2 "  To bypass (NOT recommended): git commit --no-verify"
+  exit 1
+fi
+
+exit 0

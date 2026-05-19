@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+# commit-msg hook: enforce conventional commits, require plugin scope when
+# staged changes touch plugins/<name>/**.
+#
+# Activate per-clone with:
+#   git config core.hooksPath .githooks
+set -euo pipefail
+
+msg_file="${1:?commit-msg hook expects a message file argument}"
+first_line="$(head -n1 "$msg_file" 2>/dev/null || true)"
+
+# --- Bypasses --------------------------------------------------------------
+# Allow merge / revert / fixup / squash / [skip ci] / release-bot commits.
+case "$first_line" in
+  "Merge "*|"Revert "*|"Reapply "*) exit 0 ;;
+  "fixup! "*|"squash! "*|"amend! "*) exit 0 ;;
+esac
+if [[ "$first_line" == *"[skip ci]"* ]]; then
+  exit 0
+fi
+if [[ -f .git/MERGE_MSG ]] || [[ -f .git/SQUASH_MSG ]]; then
+  exit 0
+fi
+
+# --- Discover real plugin names from the repo ------------------------------
+PLUGINS=()
+if [[ -d plugins ]]; then
+  for dir in plugins/*/; do
+    [[ -f "${dir}plugin.json" ]] && PLUGINS+=("$(basename "$dir")")
+  done
+fi
+
+# Allowed conventional-commit types.
+ALLOWED_TYPES="feat|fix|perf|refactor|docs|chore|test|ci|build|style|revert"
+
+# --- Parse the header ------------------------------------------------------
+# Pattern: <type>(<scope>)?(!)?: <subject>
+# Allow either "type: subject" or "type(scope): subject" (with optional !)
+header_re="^(${ALLOWED_TYPES})(\(([a-z0-9._-]+)\))?(!)?: .+"
+
+if ! [[ "$first_line" =~ $header_re ]]; then
+  cat >&2 <<EOF
+✖ Commit message does not match the conventional-commits format.
+
+Got:
+  $first_line
+
+Expected:
+  <type>(<scope>)?(!)?: <subject>
+
+Allowed types: ${ALLOWED_TYPES//|/, }
+
+Examples:
+  feat(strapi-plugin-dev): add /strapi-add-policy command
+  fix(ui-polish): drop deprecated allowed-tools entry
+  refactor(strapi-ui-design)!: rename Layouts API
+  chore: bump dependencies
+EOF
+  exit 1
+fi
+
+type="${BASH_REMATCH[1]}"
+scope="${BASH_REMATCH[3]:-}"
+
+# --- Detect whether the staged diff touches plugins/<name>/** --------------
+staged_files="$(git diff --cached --name-only --diff-filter=ACMRTD 2>/dev/null || true)"
+
+touched_plugin=""
+if [[ -n "$staged_files" ]]; then
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    if [[ "$f" == plugins/*/* ]]; then
+      candidate="$(echo "$f" | cut -d/ -f2)"
+      if [[ -n "$touched_plugin" && "$touched_plugin" != "$candidate" ]]; then
+        echo >&2 "✖ This commit touches multiple plugins ($touched_plugin and $candidate)."
+        echo >&2 "  Split it into one commit per plugin so the release workflow can"
+        echo >&2 "  scope versions independently."
+        exit 1
+      fi
+      touched_plugin="$candidate"
+    fi
+  done <<< "$staged_files"
+fi
+
+# --- Validate scope --------------------------------------------------------
+if [[ -n "$touched_plugin" ]]; then
+  # The commit edits a plugin → must declare matching scope (for release types).
+  case "$type" in
+    feat|fix|perf|refactor)
+      if [[ -z "$scope" ]]; then
+        cat >&2 <<EOF
+✖ This commit edits plugins/$touched_plugin/ but the message has no scope.
+
+Release-eligible types (feat/fix/perf/refactor) MUST include the plugin name:
+
+  $type($touched_plugin): <subject>
+
+Why: the per-plugin release workflow bumps versions based on scope. Without
+one, this plugin won't get a release for your change.
+EOF
+        exit 1
+      fi
+      if [[ "$scope" != "$touched_plugin" ]]; then
+        cat >&2 <<EOF
+✖ Scope mismatch: commit says ($scope) but staged files are under plugins/$touched_plugin/.
+
+Either:
+  • Fix the scope to ($touched_plugin), or
+  • Unstage files that don't belong in this commit.
+EOF
+        exit 1
+      fi
+      ;;
+  esac
+fi
+
+# Scope, if present, must match a real plugin OR be a recognized non-plugin
+# scope (currently none — extend the allowlist below if needed).
+if [[ -n "$scope" ]]; then
+  found=0
+  for p in "${PLUGINS[@]}"; do
+    [[ "$scope" == "$p" ]] && { found=1; break; }
+  done
+  # Allowlist for non-plugin scopes (extend as the repo grows).
+  case "$scope" in
+    deps|release|marketplace|hooks|workflows|readme) found=1 ;;
+  esac
+  if [[ $found -eq 0 ]]; then
+    echo >&2 "✖ Unknown scope ($scope)."
+    echo >&2 "  Known plugin scopes: ${PLUGINS[*]:-<none>}"
+    echo >&2 "  Other allowed scopes: deps, release, marketplace, hooks, workflows, readme"
+    exit 1
+  fi
+fi
+
+# --- Subject sanity --------------------------------------------------------
+subject="${first_line#*: }"
+if [[ ${#first_line} -gt 100 ]]; then
+  echo >&2 "✖ Commit subject is ${#first_line} chars (>100). Keep it short."
+  exit 1
+fi
+if [[ "$subject" =~ ^[A-Z] ]]; then
+  echo >&2 "ℹ Subject starts with a capital — convention prefers lowercase imperative."
+fi
+if [[ "$subject" =~ \.$ ]]; then
+  echo >&2 "ℹ Subject ends with a period — convention omits trailing punctuation."
+fi
+
+exit 0
