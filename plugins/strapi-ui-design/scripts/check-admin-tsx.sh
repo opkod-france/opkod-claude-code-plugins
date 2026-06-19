@@ -36,9 +36,29 @@ if grep -qE "['\"]#[0-9a-fA-F]{3,8}['\"]" "$file_path"; then
   issues+=("• Hardcoded hex colors — use DS theme colors via props")
 fi
 
-# Deprecated v4 ModalLayout
-if grep -qE '\bModalLayout\b' "$file_path"; then
-  issues+=("• \`ModalLayout\` is the v4 API — replaced by \`Modal.Root\` + \`Modal.Content\` compound components in DS v2")
+# Removed v4 Modal* components (not just deprecated — absent from DS v2.2.1 source)
+if grep -qE '\b(ModalLayout|ModalHeader|ModalBody|ModalFooter)\b' "$file_path"; then
+  issues+=("• \`ModalLayout/ModalHeader/ModalBody/ModalFooter\` do NOT exist in DS v2 — use the \`Modal.Root/Content/Header/Title/Body/Footer\` compound API")
+fi
+
+# Layouts / Page imported from the DS instead of @strapi/strapi/admin
+if grep -qE "import[^;]*\b(Layouts|Page)\b[^;]*from ['\"]@strapi/design-system['\"]" "$file_path"; then
+  issues+=("• \`Layouts\`/\`Page\` are not exported by \`@strapi/design-system\` — import them from \`@strapi/strapi/admin\`")
+fi
+
+# Deprecated Tooltip `description` prop (v2.2.1: @deprecated, use label)
+if grep -qE '<Tooltip[^>]*\bdescription=' "$file_path"; then
+  issues+=("• \`Tooltip\` \`description\` prop is deprecated in DS v2 — use \`label\` instead")
+fi
+
+# Deprecated Th `action` prop (v2.2.1: @deprecated, pass as children)
+if grep -qE '<Th[^>]*\baction=' "$file_path"; then
+  issues+=("• \`Th\` \`action\` prop is deprecated in DS v2 — pass everything as children instead")
+fi
+
+# NumberInput uses onValueChange, not onChange
+if grep -qE '<NumberInput[^>]*\bonChange=' "$file_path"; then
+  issues+=("• \`NumberInput\` uses \`onValueChange(value: number | undefined)\`, not \`onChange\`")
 fi
 
 # Path imports from @strapi/design-system

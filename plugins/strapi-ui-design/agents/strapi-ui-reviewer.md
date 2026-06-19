@@ -19,7 +19,10 @@ Only review files under `admin/src/` of a Strapi v5 plugin. Skip server-side or 
 - [ ] No inline `style={{...}}` — use Box/Flex props.
 - [ ] No hex color literals — use theme tokens via props.
 - [ ] No `alert()` / `window.confirm()` — use `useNotification` / `Dialog`.
-- [ ] No `ModalLayout` (deprecated v4 API) — use `Modal.Root` + `Modal.Content` + `Modal.Header` + `Modal.Body` + `Modal.Footer`.
+- [ ] No `ModalLayout`/`ModalHeader`/`ModalBody`/`ModalFooter` — these were **removed** from DS v2 (not just deprecated). Use the `Modal.Root` + `Modal.Content` + `Modal.Header` + `Modal.Title` + `Modal.Body` + `Modal.Footer` compound API.
+- [ ] `Layouts` and `Page` are imported from `@strapi/strapi/admin`, NOT from `@strapi/design-system` (which does not export them).
+- [ ] No deprecated props: `Tooltip` `description` (→ `label`), `Th` `action` (→ children).
+- [ ] `NumberInput` uses `onValueChange(value: number | undefined)`, not `onChange`.
 - [ ] Imports come from the root `@strapi/design-system` package, NOT path imports.
 
 ### Page shell
@@ -87,5 +90,10 @@ Only review files under `admin/src/` of a Strapi v5 plugin. Skip server-side or 
 - HIGH: <n>, MED: <n>, LOW: <n>
 - Quick-wins: top 3 highest-impact changes
 ```
+
+When uncertain about a component's real props or sub-components, consult the
+bundled `component-catalog.md` (a source-derived API reference for DS v2.2.1)
+before flagging — it lists exact prop names, compound slots, and the symbols
+that do not exist in v2.
 
 Be specific. Cite line numbers. Read-only.

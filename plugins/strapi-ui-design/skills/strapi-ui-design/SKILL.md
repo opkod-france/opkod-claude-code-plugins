@@ -30,6 +30,8 @@ You have access to Context7 for verifying component APIs and patterns against th
 
 **Important:** The patterns in this skill's `patterns.md` and `examples.md` are your primary reference. Use Context7 to **supplement and verify**, not as a first resort — it adds latency. Prefer the bundled patterns for common operations.
 
+For the **exact API of an individual component** (props, compound sub-components, gotchas, and the symbols that no longer exist in v2), consult [component-catalog.md](component-catalog.md) — a reference derived directly from the `@strapi/design-system` v2.2.1 source. Reach for it before Context7 when you just need to confirm a prop name or which sub-components a compound exposes.
+
 ## Design Thinking for Strapi Admin
 
 Before coding, understand the context and commit to a CONSISTENT Strapi experience:
@@ -49,7 +51,9 @@ Then implement working code (React + TypeScript) that is:
 
 ## Strapi Design System v2 Guidelines
 
-### Component Library (47 Components)
+### Component Library (46 Components)
+
+> Full per-component API reference: [component-catalog.md](component-catalog.md).
 
 **Layout & Structure:**
 - `Main` - Page wrapper with proper padding
@@ -222,7 +226,11 @@ const { allowedActions: { canRead, canUpdate } } = useRBAC({
 | Native HTML buttons | Use Button, IconButton, TextButton |
 | Native HTML inputs | Use TextInput, Select, Checkbox |
 | Custom modals | Use `Modal.Root` + `Modal.Content` + `Modal.Header` + `Modal.Body` + `Modal.Footer` |
-| **`ModalLayout` (v4)** | **DEPRECATED** — replaced by `Modal.*` compound API in DS v2 |
+| **`ModalLayout` / `ModalHeader` / `ModalBody` / `ModalFooter`** | **REMOVED** in DS v2 (absent from v2.2.1 source) — use `Modal.Root/Content/Header/Title/Body/Footer` |
+| `Layouts` / `Page` from `@strapi/design-system` | Import from `@strapi/strapi/admin` — the DS does not export them |
+| `Tooltip` `description` prop | **Deprecated** — use `label` |
+| `Th` `action` prop | **Deprecated** — pass as children |
+| `NumberInput` `onChange` | Use `onValueChange(value: number \| undefined)` |
 | `alert()` or `console.*` for UX | Use `useNotification()` hook |
 | `window.confirm` | Use `Dialog` component |
 | Custom loading spinners | Use `Loader` component |
