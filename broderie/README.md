@@ -73,3 +73,27 @@ Deux options.
 ## Formulaire de contact
 
 Le formulaire utilise **Netlify Forms** (gratuit jusqu'à 100 soumissions/mois). Aucune config nécessaire — les attributs `data-netlify="true"` et le champ caché `form-name` sont déjà en place. Les messages reçus apparaissent dans l'onglet **Forms** de votre site Netlify.
+
+## Bonus — Activer le MCP Netlify pour Claude
+
+Un fichier `.mcp.json` est déjà en place dans ce dossier. Une fois activé, Claude pourra déployer ce site, gérer le domaine, consulter les soumissions du formulaire, etc. — sans copier-coller à chaque fois.
+
+### Étapes (une seule fois)
+
+1. **Récupérez un Personal Access Token Netlify**
+   - https://app.netlify.com/user/applications#personal-access-tokens → **New access token** → copiez-le
+2. **Exportez-le dans votre shell** (ajoutez à `~/.zshrc` / `~/.bashrc` pour le rendre permanent) :
+   ```bash
+   export NETLIFY_PERSONAL_ACCESS_TOKEN="votre-token-ici"
+   ```
+3. **Ouvrez ce dossier dans Claude Code**. Claude détectera `.mcp.json` et vous demandera d'autoriser le serveur Netlify.
+4. Vous pouvez maintenant dire à Claude : *"déploie le dossier courant sur Netlify"*, *"liste mes sites"*, *"montre-moi les messages reçus sur le formulaire"*, etc.
+
+### Pré-requis
+
+- Node.js **22+** (le MCP en a besoin)
+- `npx` (inclus avec npm)
+
+### Sécurité
+
+Le fichier `.mcp.json` ne contient **pas** le token : il référence la variable d'environnement `${NETLIFY_PERSONAL_ACCESS_TOKEN}`. Le token reste uniquement dans votre shell — pas dans le repo.
