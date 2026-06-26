@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[NOM DE LA MARQUE] — Numérisation de broderie machine</title>
+    <meta name="description" content="Services de numérisation de fichiers de broderie machine. Designs, logos, personnages de dessins animés, manga et calligraphie. Activité officiellement déclarée. Tous les fichiers sont testés avant livraison.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FAF6F0',
+                        ink: '#1F1B16',
+                        thread: '#B8472D',
+                        gold: '#D4A24C',
+                        sage: '#8B9D7E',
+                    },
+                    fontFamily: {
+                        serif: ['Fraunces', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .stitch-line {
+            background-image: repeating-linear-gradient(90deg, currentColor 0, currentColor 6px, transparent 6px, transparent 10px);
+            height: 2px;
+        }
+    </style>
+</head>
+<body class="bg-cream text-ink font-sans antialiased">
+
+    <!-- NAV -->
+    <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur border-b border-ink/10">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl font-semibold tracking-tight">[NOM DE LA MARQUE]</a>
+            <div class="hidden md:flex items-center gap-8 text-sm">
+                <a href="#services" class="hover:text-thread transition">Services</a>
+                <a href="#specialites" class="hover:text-thread transition">Spécialités</a>
+                <a href="#collection" class="hover:text-thread transition">Collection</a>
+                <a href="#contact" class="hover:text-thread transition">Contact</a>
+            </div>
+            <a href="#contact" class="bg-ink text-cream px-5 py-2 text-sm rounded-full hover:bg-thread transition">Devis</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="max-w-6xl mx-auto px-6 pt-20 pb-24 md:pt-32 md:pb-32">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <p class="text-thread font-medium text-sm uppercase tracking-widest mb-6">Numérisation de broderie machine</p>
+                <h1 class="font-serif text-5xl md:text-7xl leading-[1.05] font-medium mb-8">
+                    Un logo, un personnage, une calligraphie ?
+                    <span class="italic text-thread">Je le transforme en broderie.</span>
+                </h1>
+                <p class="text-lg text-ink/70 mb-10 max-w-lg">
+                    Numérisation professionnelle de tous vos designs en fichiers prêts à coudre. Chaque fichier est testé avant livraison.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#contact" class="bg-ink text-cream px-7 py-3.5 rounded-full hover:bg-thread transition font-medium">Demander un devis</a>
+                    <a href="#collection" class="border border-ink/20 px-7 py-3.5 rounded-full hover:bg-ink/5 transition font-medium">Voir la collection</a>
+                </div>
+                <div class="mt-12 flex items-center gap-6 text-sm text-ink/60">
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                        Activité déclarée
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                        Fichiers testés
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                        Tous formats
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="aspect-square bg-ink/5 rounded-3xl flex items-center justify-center border border-ink/10">
+                    <div class="text-center p-8">
+                        <p class="font-serif italic text-ink/40 text-lg">[ Photo hero — votre meilleure broderie ]</p>
+                        <p class="text-sm text-ink/30 mt-2">Format carré recommandé</p>
+                    </div>
+                </div>
+                <div class="absolute -bottom-6 -left-6 bg-gold text-ink px-5 py-3 rounded-2xl shadow-lg">
+                    <p class="font-serif text-2xl font-semibold">[XX]+</p>
+                    <p class="text-xs uppercase tracking-wider">Fichiers prêts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto px-6"><div class="stitch-line text-ink/20"></div></div>
+
+    <!-- SERVICES -->
+    <section id="services" class="max-w-6xl mx-auto px-6 py-24">
+        <div class="mb-16">
+            <p class="text-thread font-medium text-sm uppercase tracking-widest mb-4">Services</p>
+            <h2 class="font-serif text-4xl md:text-5xl font-medium max-w-2xl">Ce que je fais pour vous.</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl border border-ink/10">
+                <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center mb-6">
+                    <span class="font-serif text-2xl text-thread">01</span>
+                </div>
+                <h3 class="font-serif text-2xl mb-3">Numérisation sur mesure</h3>
+                <p class="text-ink/70">À partir de votre image, dessin ou logo, je crée un fichier de broderie prêt à coudre dans le format de votre choix.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-ink/10">
+                <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center mb-6">
+                    <span class="font-serif text-2xl text-thread">02</span>
+                </div>
+                <h3 class="font-serif text-2xl mb-3">Test en conditions réelles</h3>
+                <p class="text-ink/70">Chaque fichier est testé sur machine avant livraison. Pas de mauvaise surprise une fois chez vous.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-ink/10">
+                <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center mb-6">
+                    <span class="font-serif text-2xl text-thread">03</span>
+                </div>
+                <h3 class="font-serif text-2xl mb-3">Collection prête à l'emploi</h3>
+                <p class="text-ink/70">Une grande bibliothèque de fichiers déjà numérisés et disponibles immédiatement. Demandez votre motif.</p>
+            </div>
+        </div>
+
+        <!-- FORMATS -->
+        <div class="mt-16 bg-ink text-cream p-8 md:p-12 rounded-2xl">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="font-serif text-3xl mb-3">Formats acceptés</h3>
+                    <p class="text-cream/70">Je livre dans tous les principaux formats du marché pour s'adapter à votre machine.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.PES</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.DST</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.EXP</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.JEF</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.VP3</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">.XXX</span>
+                    <span class="bg-cream/10 px-4 py-2 rounded-full text-sm">[à compléter]</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto px-6"><div class="stitch-line text-ink/20"></div></div>
+
+    <!-- SPECIALITES -->
+    <section id="specialites" class="max-w-6xl mx-auto px-6 py-24">
+        <div class="mb-16 text-center">
+            <p class="text-thread font-medium text-sm uppercase tracking-widest mb-4">Spécialités</p>
+            <h2 class="font-serif text-4xl md:text-5xl font-medium max-w-3xl mx-auto">Deux univers que je maîtrise particulièrement.</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="group relative aspect-[4/5] bg-ink/5 rounded-2xl overflow-hidden border border-ink/10">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <p class="font-serif italic text-ink/40 text-lg">[ Image manga / anime ]</p>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent flex flex-col justify-end p-8">
+                    <p class="text-gold uppercase tracking-widest text-xs mb-2">01</p>
+                    <h3 class="font-serif text-3xl text-cream mb-2">Personnages — dessins animés & manga</h3>
+                    <p class="text-cream/80">Du chibi aux portraits détaillés, je restitue la finesse des traits et les couleurs originales.</p>
+                </div>
+            </div>
+            <div class="group relative aspect-[4/5] bg-ink/5 rounded-2xl overflow-hidden border border-ink/10">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <p class="font-serif italic text-ink/40 text-lg">[ Image calligraphie ]</p>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent flex flex-col justify-end p-8">
+                    <p class="text-gold uppercase tracking-widest text-xs mb-2">02</p>
+                    <h3 class="font-serif text-3xl text-cream mb-2">Calligraphie</h3>
+                    <p class="text-cream/80">Prénoms, monogrammes, citations — chaque trait de plume est respecté pour un rendu élégant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto px-6"><div class="stitch-line text-ink/20"></div></div>
+
+    <!-- COLLECTION -->
+    <section id="collection" class="max-w-6xl mx-auto px-6 py-24">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+                <p class="text-thread font-medium text-sm uppercase tracking-widest mb-4">Collection prête à l'emploi</p>
+                <h2 class="font-serif text-4xl md:text-5xl font-medium max-w-2xl">Plus de [XX] fichiers déjà numérisés et testés.</h2>
+            </div>
+            <a href="#contact" class="text-thread underline underline-offset-4 hover:text-ink transition whitespace-nowrap">Voir ce qui est disponible →</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 1 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 2 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 3 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 4 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 5 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 6 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 7 ]</p>
+            </div>
+            <div class="aspect-square bg-ink/5 rounded-xl flex items-center justify-center border border-ink/10">
+                <p class="font-serif italic text-ink/40 text-sm">[ Aperçu 8 ]</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL / TRUST -->
+    <section class="bg-ink text-cream py-24">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <p class="text-gold font-medium text-sm uppercase tracking-widest mb-6">Confiance</p>
+            <p class="font-serif text-3xl md:text-4xl leading-snug italic mb-8">
+                « [ Témoignage client — une phrase courte qui montre pourquoi on vous recommande. ] »
+            </p>
+            <p class="text-cream/60">— [ Nom du client, type de projet ]</p>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="max-w-6xl mx-auto px-6 py-24">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div>
+                <p class="text-thread font-medium text-sm uppercase tracking-widest mb-4">Contact</p>
+                <h2 class="font-serif text-4xl md:text-5xl font-medium mb-6">Parlons de votre projet.</h2>
+                <p class="text-ink/70 mb-10 text-lg">
+                    Une idée précise, un motif à numériser, une demande sur ma collection ? Envoyez-moi un message, je vous réponds rapidement.
+                </p>
+                <div class="space-y-5">
+                    <a href="mailto:[VOTRE-EMAIL]" class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center group-hover:bg-thread group-hover:text-cream transition">
+                            <span class="text-lg">@</span>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-ink/50">Email</p>
+                            <p class="font-medium">[VOTRE-EMAIL]</p>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/[VOTRE-NUMERO]" class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center group-hover:bg-thread group-hover:text-cream transition">
+                            <span class="text-lg">✆</span>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-ink/50">WhatsApp</p>
+                            <p class="font-medium">[VOTRE-NUMERO]</p>
+                        </div>
+                    </a>
+                    <a href="https://instagram.com/[VOTRE-COMPTE]" class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center group-hover:bg-thread group-hover:text-cream transition">
+                            <span class="text-lg">◉</span>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-ink/50">Instagram</p>
+                            <p class="font-medium">@[VOTRE-COMPTE]</p>
+                        </div>
+                    </a>
+                    <a href="https://facebook.com/[VOTRE-PAGE]" class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 bg-thread/10 rounded-xl flex items-center justify-center group-hover:bg-thread group-hover:text-cream transition">
+                            <span class="text-lg">f</span>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-ink/50">Facebook</p>
+                            <p class="font-medium">[VOTRE-PAGE]</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="bg-white p-8 md:p-10 rounded-2xl border border-ink/10">
+                <input type="hidden" name="form-name" value="contact">
+                <p class="hidden"><label>Ne pas remplir : <input name="bot-field"></label></p>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="name">Votre nom</label>
+                        <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-cream border border-ink/10 rounded-lg focus:outline-none focus:border-thread transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="email">Votre email</label>
+                        <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-cream border border-ink/10 rounded-lg focus:outline-none focus:border-thread transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="project">Votre projet</label>
+                        <textarea id="project" name="project" rows="5" required class="w-full px-4 py-3 bg-cream border border-ink/10 rounded-lg focus:outline-none focus:border-thread transition" placeholder="Décrivez votre projet : type de motif, format souhaité, taille approximative..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-ink text-cream py-3.5 rounded-lg hover:bg-thread transition font-medium">
+                        Envoyer la demande
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-ink/10">
+        <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-ink/60">
+            <p>© <span id="year"></span> [NOM DE LA MARQUE] — Numérisation de broderie. Activité déclarée.</p>
+            <p class="font-serif italic">Fait avec soin, point par point.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
